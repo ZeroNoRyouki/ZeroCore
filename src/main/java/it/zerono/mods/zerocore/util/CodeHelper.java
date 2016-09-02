@@ -1,6 +1,7 @@
 package it.zerono.mods.zerocore.util;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 
@@ -27,6 +28,13 @@ public final class CodeHelper {
 
     public static String i18nValue(boolean value) {
         return I18n.format(value ? "debug.zerocore.true" : "debug.zerocore.false");
+    }
+
+    /**
+     * Check if we are currently running in a deobfuscated/development environment
+     */
+    public static boolean runningInDevEnv() {
+        return (Boolean)Launch.blackboard.get("fml.deobfuscatedEnvironment");
     }
 
 }
