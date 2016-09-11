@@ -17,7 +17,11 @@ import java.util.Random;
 public class WorldGenMinableOres extends ModWorldGeneratorBase {
 
     public WorldGenMinableOres(final IWorldGenWhiteList whiteList) {
-        super(whiteList);
+        this(whiteList, false);
+    }
+
+    public WorldGenMinableOres(final IWorldGenWhiteList whiteList, final boolean useBlackListLogic) {
+        super(whiteList, useBlackListLogic);
     }
 
     public void addOre(final Block ore, final Block blockToReplace, final int minY, final int maxY,

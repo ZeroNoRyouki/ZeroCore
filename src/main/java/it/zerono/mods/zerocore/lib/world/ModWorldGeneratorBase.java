@@ -13,7 +13,7 @@ public abstract class ModWorldGeneratorBase implements IWorldGenerator {
     public final void generate(final Random random, final int chunkX, final int chunkZ, final World world,
                          final IChunkGenerator chunkGenerator, final IChunkProvider chunkProvider) {
 
-        if ((null == this._whiteList) || !this._whiteList.shouldGenerateIn(world))
+        if ((null == this._whiteList) || this._useBlackList == this._whiteList.shouldGenerateIn(world))
             return;
 
         this.generateChunk(random, chunkX << 4, chunkZ << 4, world, chunkGenerator, chunkProvider);
@@ -23,9 +23,12 @@ public abstract class ModWorldGeneratorBase implements IWorldGenerator {
                                           final World world, final IChunkGenerator chunkGenerator,
                                           final IChunkProvider chunkProvider);
 
-    protected ModWorldGeneratorBase(final IWorldGenWhiteList whiteList) {
+    protected ModWorldGeneratorBase(final IWorldGenWhiteList whiteList, final boolean useBlackListLogic) {
+
         this._whiteList = whiteList;
+        this._useBlackList = useBlackListLogic;
     }
 
     protected final IWorldGenWhiteList _whiteList;
+    protected final boolean _useBlackList;
 }
