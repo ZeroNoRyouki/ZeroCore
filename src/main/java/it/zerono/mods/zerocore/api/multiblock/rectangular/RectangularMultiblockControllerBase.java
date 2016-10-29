@@ -86,6 +86,12 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 							validatorCallback.setLastError("zerocore:api.multiblock.validation.invalid_part", x, y, z);
 							return false;
 						}
+
+						if (!this.doesPartBelong(part)) {
+
+							validatorCallback.setLastError("zerocore:api.multiblock.validation.invalid_foreign_part", x, y, z);
+							return false;
+						}
 					}
 					else {
 						// This is permitted so that we can incorporate certain non-multiblock parts inside interiors

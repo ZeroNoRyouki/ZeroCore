@@ -10,6 +10,7 @@ zerocore:api.multiblock.validation.invalid_part_for_bottom=Block at %1$d, %2$d, 
 zerocore:api.multiblock.validation.invalid_part_for_top=Block at %1$d, %2$d, %3$d is not valid for use in the machine's top layer
 zerocore:api.multiblock.validation.invalid_part_for_sides=Block at %1$d, %2$d, %3$d is not valid for use in the machine's sides
 zerocore:api.multiblock.validation.invalid_part_for_interior=Block at %1$d, %2$d, %3$d is not valid for use in the machine's interior
+zerocore:api.multiblock.validation.invalid_foreign_part=Block at %1$d, %2$d, %3$d belong to another machine
 
 # Items
 item.zerocore:debugTool.name=Debug Tool

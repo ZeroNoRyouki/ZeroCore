@@ -994,6 +994,13 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 		this.WORLD.markBlockRangeForRenderUpdate(this.getMinimumCoord(), this.getMaximumCoord());
 	}
 
+	/**
+	Check if a multiblock part is connected to this controller
+	 */
+	protected boolean doesPartBelong(IMultiblockPart part) {
+		return this == part.getMultiblockController() || this.connectedParts.contains(part);
+	}
+
 	private static final IMultiblockRegistry REGISTRY;
 
     static {
