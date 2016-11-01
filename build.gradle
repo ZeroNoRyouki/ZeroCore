@@ -22,13 +22,16 @@ configFile.withReader {
     project.ext.config = new ConfigSlurper().parse prop
 }
 
-version = "${config.minecraft_version}-${config.mod_version_major}.${config.mod_version_api}.${config.mod_version_minor}.${config.mod_version_patch}"
+version = "${config.mod_version_major}.${config.mod_version_api}.${config.mod_version_minor}.${config.mod_version_patch}"
 group = "${config.group_id}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "${config.mod_id}"
+archivesBaseName = "ZeroCore-${config.minecraft_version}"
+
+ext.dependencies = "required-after:Forge@[${config.forge_version_minDep},${config.forge_version_maxDep})"
 
 minecraft {
     version = "${config.forge_version}"
-	
+
+
 	if (file("../run-${config.minecraft_version}").exists()) {
 		runDir = "../run-${config.minecraft_version}"
 	} else {
@@ -36,10 +39,6 @@ minecraft {
 	}
 
     mappings = "${config.minecraft_mappings}"
-    
-	replaceIn "References.java"
-    replace "@VERSION@", project.version
-	replace "@MC_VERSION@", config.minecraft_version
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
@@ -71,6 +70,17 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+}
+
+compileJava.doFirst {
+
+    File file = new File(projectDir, 'build/sources/main/java/it/zerono/mods/zerocore/internal/ZeroCore.java')
+    String source = file.getText('UTF-8')
+            .replaceAll('version = "0.0.0.0"', 'version = "' + project.version + '"')
+            .replaceAll('acceptedMinecraftVersions = ""', 'acceptedMinecraftVersions = "' + config.minecraft_version + '"')
+            .replaceAll('dependencies = ".*"', 'dependencies = "' + project.ext.dependencies + '"')
+
+    file.write(source, 'UTF-8')
 }
 
 jar {
