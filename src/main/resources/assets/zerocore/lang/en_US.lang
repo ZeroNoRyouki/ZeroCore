@@ -26,3 +26,7 @@ zerocore:debugTool.block.tooltip3=%1$sSneak: %2$squery on the client side
 # Debug-tools messages
 debug.zerocore.true=True
 debug.zerocore.false=False
+
+# Version checker
+zerocore:vercheck.update1=§6NEW version§f %1$s §6of§f %2$s §6is available:§f please update!!!
+zerocore:vercheck.update2=§6NEW version§f %1$s §6of§f %2$s §6is available:§f %3$s

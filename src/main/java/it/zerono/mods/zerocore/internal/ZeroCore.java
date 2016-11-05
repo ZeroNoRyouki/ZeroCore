@@ -9,7 +9,8 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = References.MOD_ID, name = References.MOD_NAME, acceptedMinecraftVersions = "", dependencies = ".*", version = "0.0.0.0")
+@Mod(modid = References.MOD_ID, name = References.MOD_NAME, acceptedMinecraftVersions = "",
+        dependencies = "required-after:Forge", version = "0.0.0.0")
 public final class ZeroCore implements IModInitializationHandler {
 
     public static CommonProxy getProxy() {
@@ -19,18 +20,19 @@ public final class ZeroCore implements IModInitializationHandler {
     @Override
     @Mod.EventHandler
     public void onPreInit(FMLPreInitializationEvent event) {
-        ZeroItems.initialize();
+        ZeroCore.s_proxy.onPreInit(event);
     }
 
     @Override
     @Mod.EventHandler
     public void onInit(FMLInitializationEvent event) {
-        ZeroItems.debugTool.registerRecipes();
+        ZeroCore.s_proxy.onInit(event);
     }
 
     @Override
+    @Mod.EventHandler
     public void onPostInit(FMLPostInitializationEvent event) {
-        // nothing to do here so no @Mod.EventHandler annotation
+        ZeroCore.s_proxy.onPostInit(event);
     }
 
     @Mod.Instance
