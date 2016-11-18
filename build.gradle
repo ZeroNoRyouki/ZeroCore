@@ -52,17 +52,16 @@ configurations {
 dependencies {
 }
 
-processResources
-{
+processResources  {
+
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.ext.fullVersion
     inputs.property "mcversion", project.minecraft.version
 
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
+
         include 'mcmod.info'
-                
-        // replace version and mcversion
         expand 'version':project.ext.fullVersion, 'mcversion':project.minecraft.version
     }
         
