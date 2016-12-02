@@ -152,12 +152,12 @@ public abstract class ModTileEntity extends TileEntity {
      Chunk and block updates
      */
 
+    /*
     @Override
     public void onChunkUnload() {
-
         if (!tileEntityInvalid)
             this.invalidate();
-    }
+    }*/
 
     public void markChunkDirty() {
 

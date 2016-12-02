@@ -72,7 +72,7 @@ public class WorldGenMinableOres extends ModWorldGeneratorBase {
             for (int iteration = 0; iteration < generator.iterations; ++iteration) {
 
                 final int y = generator.minY + random.nextInt(generator.maxY - generator.minY);
-                final BlockPos position = new BlockPos(firstBlockX + random.nextInt(16), y, firstBlockZ + random.nextInt(16));
+                final BlockPos position = new BlockPos(firstBlockX, y, firstBlockZ);
 
                 generator.generate(world, random, position);
             }
