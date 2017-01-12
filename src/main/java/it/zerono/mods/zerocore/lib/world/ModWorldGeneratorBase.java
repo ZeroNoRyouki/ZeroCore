@@ -19,6 +19,10 @@ public abstract class ModWorldGeneratorBase implements IWorldGenerator {
         this.generateChunk(random, chunkX << 4, chunkZ << 4, world, chunkGenerator, chunkProvider);
     }
 
+    public void setBehavior(final boolean useBlackListLogic) {
+        this._useBlackList = useBlackListLogic;
+    }
+
     protected abstract void generateChunk(final Random random, final int firstBlockX, final int firstBlockZ,
                                           final World world, final IChunkGenerator chunkGenerator,
                                           final IChunkProvider chunkProvider);
@@ -30,5 +34,5 @@ public abstract class ModWorldGeneratorBase implements IWorldGenerator {
     }
 
     protected final IWorldGenWhiteList _whiteList;
-    protected final boolean _useBlackList;
+    protected boolean _useBlackList;
 }
