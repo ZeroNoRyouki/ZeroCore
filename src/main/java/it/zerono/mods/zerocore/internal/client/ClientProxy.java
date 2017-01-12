@@ -23,6 +23,6 @@ public class ClientProxy extends CommonProxy {
         super.onPreInit(event);
 
         MinecraftForge.EVENT_BUS.register(VersionChecker.class);
-        VersionChecker.scheduleCheck("http://ws.zerono.it/check.ashx");
+        //VersionChecker.scheduleCheck("http://ws.zerono.it/check.ashx");
     }
 }
