@@ -1,5 +1,12 @@
 package it.zerono.mods.zerocore.api.multiblock;
 
+/*
+ * A multiblock library for making irregularly-shaped multiblock machines
+ *
+ * Original author: ZeroNoRyouki
+ * https://github.com/ZeroNoRyouki/ZeroCore
+ */
+
 import net.minecraft.world.World;
 
 public interface IMultiblockRegistry {

@@ -6,7 +6,7 @@ package it.zerono.mods.zerocore.api.multiblock.rectangular;
  * Original author: Erogenous Beef
  * https://github.com/erogenousbeef/BeefCore
  *
- * Ported to Minecraft 1.9 by ZeroNoRyouki
+ * Ported to Minecraft 1.9+ and maintained by ZeroNoRyouki
  * https://github.com/ZeroNoRyouki/ZeroCore
  */
 
