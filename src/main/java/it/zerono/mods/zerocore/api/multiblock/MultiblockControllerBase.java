@@ -6,7 +6,7 @@ package it.zerono.mods.zerocore.api.multiblock;
  * Original author: Erogenous Beef
  * https://github.com/erogenousbeef/BeefCore
  *
- * Ported to Minecraft 1.9 by ZeroNoRyouki
+ * Ported to Minecraft 1.9+ and maintained by ZeroNoRyouki
  * https://github.com/ZeroNoRyouki/ZeroCore
  */
 
@@ -397,6 +397,7 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 	 */
 	private void assembleMachine(AssemblyState oldState) {
 		for(IMultiblockPart part : connectedParts) {
+			part.onPreMachineAssembled(this);
 			part.onMachineAssembled(this);
 		}
 		
@@ -406,6 +407,10 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 		}
 		else {
 			onMachineAssembled();
+		}
+
+		for(IMultiblockPart part : connectedParts) {
+			part.onPostMachineAssembled(this);
 		}
 	}
 	
@@ -417,11 +422,16 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 	 */
 	private void disassembleMachine() {
 		for(IMultiblockPart part : connectedParts) {
+			part.onPreMachineBroken();
 			part.onMachineBroken();
 		}
 		
 		this.assemblyState = AssemblyState.Disassembled;
 		onMachineDisassembled();
+
+		for(IMultiblockPart part : connectedParts) {
+			part.onPostMachineBroken();
+		}
 	}
 	
 	/**
@@ -923,7 +933,20 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 	public boolean isAssembled() {
 		return this.assemblyState == AssemblyState.Assembled;
 	}
-	
+	/**
+	 * @return True if this multiblock machine is disassembled.
+	 */
+	public boolean isDisassembled() {
+		return this.assemblyState == AssemblyState.Disassembled;
+	}
+
+	/**
+	 * @return True if this multiblock machine is paused.
+	 */
+	public boolean isPaused() {
+		return this.assemblyState == AssemblyState.Paused;
+	}
+
 	private void selectNewReferenceCoord() {
 		IChunkProvider chunkProvider = WORLD.getChunkProvider();
 		IMultiblockPart theChosenOne = null;

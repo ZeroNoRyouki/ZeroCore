@@ -6,7 +6,7 @@ package it.zerono.mods.zerocore.api.multiblock;
  * Original author: Erogenous Beef
  * https://github.com/erogenousbeef/BeefCore
  *
- * Ported to Minecraft 1.9 by ZeroNoRyouki
+ * Ported to Minecraft 1.9+ and maintained by ZeroNoRyouki
  * https://github.com/ZeroNoRyouki/ZeroCore
  */
 
@@ -197,11 +197,25 @@ public abstract class MultiblockTileEntityBase extends ModTileEntity implements 
 		this.cachedMultiblockData = null;
 	}
 
+	@Deprecated // Will be removed in next release. Use onPreMachineAssembled/onPostMachineAssembled instead. Currently called immediately after onPreMachineAssembled
 	@Override
 	public abstract void onMachineAssembled(MultiblockControllerBase multiblockControllerBase);
 
 	@Override
+	public abstract void onPreMachineAssembled(MultiblockControllerBase multiblockControllerBase);
+
+	@Override
+	public abstract void onPostMachineAssembled(MultiblockControllerBase multiblockControllerBase);
+
+	@Deprecated // Will be removed in next release. Use onPreMachineBroken/onPostMachineBroken instead. Currently called immediately after onPreMachineBroken
+	@Override
 	public abstract void onMachineBroken();
+
+	@Override
+	public abstract void onPreMachineBroken();
+
+	@Override
+	public abstract void onPostMachineBroken();
 
 	@Override
 	public abstract void onMachineActivated();
@@ -212,6 +226,21 @@ public abstract class MultiblockTileEntityBase extends ModTileEntity implements 
 	@Override
 	public boolean isConnected() {
 		return (controller != null);
+	}
+
+	@Override
+	public boolean isMachineAssembled() {
+		return null != controller && controller.isAssembled();
+	}
+
+	@Override
+	public boolean isMachineDisassembled() {
+		return null != controller && controller.isDisassembled();
+	}
+
+	@Override
+	public boolean isMachinePaused() {
+		return null != controller && controller.isPaused();
 	}
 
 	@Override

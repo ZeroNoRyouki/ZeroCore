@@ -6,7 +6,7 @@ package it.zerono.mods.zerocore.api.multiblock;
  * Original author: Erogenous Beef
  * https://github.com/erogenousbeef/BeefCore
  *
- * Ported to Minecraft 1.9 by ZeroNoRyouki
+ * Ported to Minecraft 1.9+ and maintained by ZeroNoRyouki
  * https://github.com/ZeroNoRyouki/ZeroCore
  */
 
@@ -28,7 +28,22 @@ public interface IMultiblockPart {
 	 * @return True if this block is connected to a multiblock controller. False otherwise.
 	 */
 	boolean isConnected();
-	
+
+	/**
+	 * @return True if this block is connected to a multiblock controller of an assembled machine. False otherwise.
+	 */
+	boolean isMachineAssembled();
+
+	/**
+	 * @return True if this block is connected to a multiblock controller of an disassembled machine. False otherwise.
+	 */
+	boolean isMachineDisassembled();
+
+	/**
+	 * @return True if this block is connected to a multiblock controller of an paused machine. False otherwise.
+	 */
+	boolean isMachinePaused();
+
 	/**
 	 * @return The attached multiblock controller for this tile entity. 
 	 */
@@ -146,13 +161,45 @@ public interface IMultiblockPart {
 	 * of the machine! They form an outer bounding box for the whole machine itself.
 	 * @param multiblockControllerBase The controller to which this part is being assembled.
 	 */
+	@Deprecated // Will be removed in next release. Use onPreMachineAssembled/onPostMachineAssembled instead. Currently called immediately after onPreMachineAssembled
 	void onMachineAssembled(MultiblockControllerBase multiblockControllerBase);
-	
+
+	/**
+	 * Called immediately BEFORE a machine is fully assembled from the disassembled state, meaning
+	 * it was broken by a player/entity action, not by chunk unloads.
+	 * Note that, for non-square machines, the min/max coordinates may not actually be part
+	 * of the machine! They form an outer bounding box for the whole machine itself.
+	 * @param multiblockControllerBase The controller to which this part is being assembled.
+	 */
+	void onPreMachineAssembled(MultiblockControllerBase multiblockControllerBase);
+
+	/**
+	 * Called immediately AFTER a machine was fully assembled from the disassembled state, meaning
+	 * it was broken by a player/entity action, not by chunk unloads.
+	 * Note that, for non-square machines, the min/max coordinates may not actually be part
+	 * of the machine! They form an outer bounding box for the whole machine itself.
+	 * @param multiblockControllerBase The controller to which this part is being assembled.
+	 */
+	void onPostMachineAssembled(MultiblockControllerBase multiblockControllerBase);
+
 	/**
 	 * Called when the machine is broken for game reasons, e.g. a player removed a block
 	 * or an explosion occurred.
 	 */
+	@Deprecated // Will be removed in next release. Use onPreMachineBroken/onPostMachineBroken instead. Currently called immediately after onPreMachineBroken
 	void onMachineBroken();
+
+	/**
+	 * Called immediately BEFORE the machine is broken for game reasons, e.g. a player removed a block
+	 * or an explosion occurred.
+	 */
+	void onPreMachineBroken();
+
+	/**
+	 * Called immediately AFTER the machine is broken for game reasons, e.g. a player removed a block
+	 * or an explosion occurred.
+	 */
+	void onPostMachineBroken();
 	
 	/**
 	 * Called when the user activates the machine. This is not called by default, but is included

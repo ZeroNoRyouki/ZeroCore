@@ -6,7 +6,7 @@ package it.zerono.mods.zerocore.api.multiblock.rectangular;
  * Original author: Erogenous Beef
  * https://github.com/erogenousbeef/BeefCore
  *
- * Ported to Minecraft 1.9 by ZeroNoRyouki
+ * Ported to Minecraft 1.9+ and maintained by ZeroNoRyouki
  * https://github.com/ZeroNoRyouki/ZeroCore
  */
 
@@ -14,6 +14,8 @@ import it.zerono.mods.zerocore.api.multiblock.MultiblockControllerBase;
 import it.zerono.mods.zerocore.api.multiblock.MultiblockTileEntityBase;
 import it.zerono.mods.zerocore.api.multiblock.validation.IMultiblockValidator;
 import it.zerono.mods.zerocore.lib.BlockFacings;
+import li.cil.oc.api.event.RackMountableRenderEvent;
+import net.minecraft.block.Block;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
@@ -102,6 +104,20 @@ public abstract class RectangularMultiblockTileEntityBase extends MultiblockTile
 		return null != facings && !facings.none() && 1 == facings.countFacesIf(true) ? facings.firstIf(true) : null;
 	}
 
+	/*
+	Tell all blocks in our outward-facing-set that our blockstate is changed
+	*/
+	public void notifyOutwardNeighborsOfStateChange() {
+
+		final Block blockType = this.getBlockType();
+		final BlockFacings facings = this.getOutwardsDir();
+		final BlockPos position = this.getWorldPosition();
+
+		for (EnumFacing facing: EnumFacing.VALUES)
+			if (facings.isSet(facing))
+				this.worldObj.notifyBlockOfStateChange(position.offset(facing), blockType);
+	}
+
 
 	// Handlers from MultiblockTileEntityBase
 
@@ -111,15 +127,44 @@ public abstract class RectangularMultiblockTileEntityBase extends MultiblockTile
 		recalculateOutwardsDirection(newController.getMinimumCoord(), newController.getMaximumCoord());
 	}
 
+	/*
 	@Override
 	public void onMachineAssembled(MultiblockControllerBase controller) {
 
 		// Discover where I am on the reactor
 		recalculateOutwardsDirection(controller.getMinimumCoord(), controller.getMaximumCoord());
 	}
+	*/
+	@Deprecated
+	@Override
+	public void onMachineAssembled(MultiblockControllerBase controller) {
+	}
+	@Override
+	public void onPreMachineAssembled(MultiblockControllerBase controller) {
+		// Discover where I am on the reactor
+		this.recalculateOutwardsDirection(controller.getMinimumCoord(), controller.getMaximumCoord());
+	}
 
 	@Override
+	public void onPostMachineAssembled(MultiblockControllerBase controller) {
+	}
+	/*
+	@Override
 	public void onMachineBroken() {
+		position = PartPosition.Unknown;
+		outwardFacings = BlockFacings.NONE;
+	}*/
+	@Deprecated
+	@Override
+	public void onMachineBroken() {
+	}
+
+	@Override
+	public void onPreMachineBroken() {
+	}
+
+	@Override
+	public void onPostMachineBroken() {
 		position = PartPosition.Unknown;
 		outwardFacings = BlockFacings.NONE;
 	}
