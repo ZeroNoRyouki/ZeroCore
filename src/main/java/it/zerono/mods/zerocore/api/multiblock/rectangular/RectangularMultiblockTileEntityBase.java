@@ -18,6 +18,7 @@ import li.cil.oc.api.event.RackMountableRenderEvent;
 import net.minecraft.block.Block;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -112,10 +113,11 @@ public abstract class RectangularMultiblockTileEntityBase extends MultiblockTile
 		final Block blockType = this.getBlockType();
 		final BlockFacings facings = this.getOutwardsDir();
 		final BlockPos position = this.getWorldPosition();
+		final World world = this.getWorld();
 
 		for (EnumFacing facing: EnumFacing.VALUES)
 			if (facings.isSet(facing))
-				this.worldObj.notifyBlockOfStateChange(position.offset(facing), blockType);
+				world.notifyBlockOfStateChange(position.offset(facing), blockType);
 	}
 
 

@@ -16,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLLog;
 
 import java.util.ArrayList;
@@ -178,8 +179,9 @@ public abstract class MultiblockTileEntityBase extends ModTileEntity implements 
 	 */
 	@Override
 	public void validate() {
+
 		super.validate();
-        REGISTRY.onPartAdded(this.worldObj, this);
+        REGISTRY.onPartAdded(this.getWorld(), this);
 	}
 
 	@Override
@@ -301,11 +303,12 @@ public abstract class MultiblockTileEntityBase extends ModTileEntity implements 
 		TileEntity te;
 		List<IMultiblockPart> neighborParts = new ArrayList<IMultiblockPart>();
 		BlockPos neighborPosition, partPosition = this.getWorldPosition();
+		final World world = this.getWorld();
 
 		for (EnumFacing facing : EnumFacing.VALUES) {
 
 			neighborPosition = partPosition.offset(facing);
-			te = this.worldObj.getTileEntity(neighborPosition);
+			te = world.getTileEntity(neighborPosition);
 
 			if (te instanceof IMultiblockPart)
 				neighborParts.add((IMultiblockPart)te);
@@ -316,8 +319,9 @@ public abstract class MultiblockTileEntityBase extends ModTileEntity implements 
 	
 	@Override
 	public void onOrphaned(MultiblockControllerBase controller, int oldSize, int newSize) {
+
 		this.markDirty();
-		worldObj.markChunkDirty(this.getWorldPosition(), this);
+		this.getWorld().markChunkDirty(this.getWorldPosition(), this);
 	}
 
 	@Override
@@ -332,7 +336,7 @@ public abstract class MultiblockTileEntityBase extends ModTileEntity implements 
 
 	//// Helper functions for notifying neighboring blocks
 	protected void notifyNeighborsOfBlockChange() {
-		worldObj.notifyNeighborsOfStateChange(this.getWorldPosition(), this.getBlockType());
+		this.getWorld().notifyNeighborsOfStateChange(this.getWorldPosition(), this.getBlockType());
 	}
 
 	@Deprecated // not implemented yet
@@ -355,7 +359,7 @@ public abstract class MultiblockTileEntityBase extends ModTileEntity implements 
 		}
 
 		// Clean part out of lists in the registry
-        REGISTRY.onPartRemovedFromWorld(worldObj, this);
+        REGISTRY.onPartRemovedFromWorld(this.getWorld(), this);
 	}
 
 	/**

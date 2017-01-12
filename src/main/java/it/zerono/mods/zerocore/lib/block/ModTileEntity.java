@@ -24,7 +24,7 @@ public abstract class ModTileEntity extends TileEntity {
 
         BlockPos position = this.getPos();
 
-        if (worldObj.getTileEntity(position) != this)
+        if (this.getWorld().getTileEntity(position) != this)
             return false;
 
         return entityplayer.getDistanceSq((double)position.getX() + 0.5D, (double)position.getY() + 0.5D,
@@ -52,7 +52,7 @@ public abstract class ModTileEntity extends TileEntity {
      */
     public boolean openGui(Object mod, EntityPlayer player, int guiId) {
 
-        player.openGui(mod, guiId, this.worldObj, this.pos.getX(), this.pos.getY(), this.pos.getZ());
+        player.openGui(mod, guiId, this.getWorld(), this.pos.getX(), this.pos.getY(), this.pos.getZ());
         return true;
     }
 
@@ -160,13 +160,11 @@ public abstract class ModTileEntity extends TileEntity {
     }*/
 
     public void markChunkDirty() {
-
-        this.worldObj.markChunkDirty(this.getPos(), this);
+        this.getWorld().markChunkDirty(this.getPos(), this);
     }
 
     public void callNeighborBlockChange() {
-
-        this.worldObj.notifyNeighborsOfStateChange(this.getPos(), this.getBlockType());
+        this.getWorld().notifyNeighborsOfStateChange(this.getPos(), this.getBlockType());
     }
 
     @Deprecated // not implemented
@@ -176,18 +174,16 @@ public abstract class ModTileEntity extends TileEntity {
     }
 
     public void notifyBlockUpdate() {
-
-        WorldHelper.notifyBlockUpdate(this.worldObj, this.getPos(), null, null);
+        WorldHelper.notifyBlockUpdate(this.getWorld(), this.getPos(), null, null);
     }
 
     public void notifyBlockUpdate(IBlockState oldState, IBlockState newState) {
-
-        WorldHelper.notifyBlockUpdate(this.worldObj, this.getPos(), oldState, newState);
+        WorldHelper.notifyBlockUpdate(this.getWorld(), this.getPos(), oldState, newState);
     }
 
     public void nofityTileEntityUpdate() {
 
         this.markDirty();
-        WorldHelper.notifyBlockUpdate(this.worldObj, this.getPos(), null, null);
+        WorldHelper.notifyBlockUpdate(this.getWorld(), this.getPos(), null, null);
     }
 }
