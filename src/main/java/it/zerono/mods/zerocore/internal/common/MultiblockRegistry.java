@@ -83,7 +83,7 @@ final class MultiblockRegistry implements IMultiblockRegistry {
      * Called before Tile Entities are ticked in the world. Do bookkeeping here.
      * @param world The world being ticked
      */
-    protected void tickStart(final World world) {
+    void tickStart(final World world) {
 
         if (this._registries.containsKey(world)) {
 
@@ -100,7 +100,7 @@ final class MultiblockRegistry implements IMultiblockRegistry {
      * @param chunkX The X coordinate of the chunk
      * @param chunkZ The Z coordinate of the chunk
      */
-    protected void onChunkLoaded(final World world, final int chunkX, final int chunkZ) {
+    void onChunkLoaded(final World world, final int chunkX, final int chunkZ) {
 
         if (this._registries.containsKey(world))
             this._registries.get(world).onChunkLoaded(chunkX, chunkZ);
@@ -110,7 +110,7 @@ final class MultiblockRegistry implements IMultiblockRegistry {
      * Called whenever a world is unloaded. Unload the relevant registry, if we have one.
      * @param world The world being unloaded.
      */
-    protected void onWorldUnloaded(final World world) {
+    void onWorldUnloaded(final World world) {
 
         if (this._registries.containsKey(world)) {
             this._registries.get(world).onWorldUnloaded();

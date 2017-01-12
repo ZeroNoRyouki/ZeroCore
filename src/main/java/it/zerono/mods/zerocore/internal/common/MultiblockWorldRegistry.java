@@ -55,7 +55,8 @@ final class MultiblockWorldRegistry {
     private final Object partsAwaitingChunkLoadMutex;
     private final Object orphanedPartsMutex;
 
-    public MultiblockWorldRegistry(final World world) {
+    MultiblockWorldRegistry(final World world) {
+
         worldObj = world;
 
         controllers = new HashSet<MultiblockControllerBase>();
@@ -73,7 +74,10 @@ final class MultiblockWorldRegistry {
     /**
      * Called before Tile Entities are ticked in the world. Run game logic.
      */
-    public void tickStart() {
+    void tickStart() {
+
+        this.worldObj.theProfiler.startSection("Zero CORE|Multiblock|Tick");
+
         if(controllers.size() > 0) {
             for(MultiblockControllerBase controller : controllers) {
                 if(controller.WORLD == worldObj && controller.WORLD.isRemote == worldObj.isRemote) {
@@ -89,15 +93,21 @@ final class MultiblockWorldRegistry {
                 }
             }
         }
+
+        this.worldObj.theProfiler.endSection();
     }
 
     /**
      * Called prior to processing multiblock controllers. Do bookkeeping.
      */
-    public void processMultiblockChanges() {
+    void processMultiblockChanges() {
+
         BlockPos coord;
 
         // Merge pools - sets of adjacent machines which should be merged later on in processing
+
+        this.worldObj.theProfiler.startSection("Zero CORE|Multiblock|Merge");
+
         List<Set<MultiblockControllerBase>> mergePools = null;
         if(orphanedParts.size() > 0) {
             Set<IMultiblockPart> orphansToProcess = null;
@@ -213,6 +223,8 @@ final class MultiblockWorldRegistry {
             }
         }
 
+        this.worldObj.theProfiler.endStartSection("Zero CORE|Multiblock|Split&Assembly");
+
         // Process splits and assembly
         // Any controllers which have had parts removed must be checked to see if some parts are no longer
         // physically connected to their master.
@@ -243,6 +255,9 @@ final class MultiblockWorldRegistry {
         }
 
         // Unregister dead controllers
+
+        this.worldObj.theProfiler.endStartSection("Zero CORE|Multiblock|DeadControllers");
+
         if(deadControllers.size() > 0) {
             for(MultiblockControllerBase controller : deadControllers) {
                 // Go through any controllers which have marked themselves as potentially dead.
@@ -260,6 +275,9 @@ final class MultiblockWorldRegistry {
         }
 
         // Process detached blocks
+
+        this.worldObj.theProfiler.endStartSection("Zero CORE|Multiblock|DetachedParts");
+
         // Any blocks which have been detached this tick should be moved to the orphaned
         // list, and will be checked next tick to see if their chunk is still loaded.
         for(IMultiblockPart part : detachedParts) {
@@ -269,6 +287,8 @@ final class MultiblockWorldRegistry {
 
         addAllOrphanedPartsThreadsafe(detachedParts);
         detachedParts.clear();
+
+        this.worldObj.theProfiler.endSection();
     }
 
     /**
@@ -277,10 +297,14 @@ final class MultiblockWorldRegistry {
      * If the chunk is not loaded, it will be added to a list of objects waiting for a chunkload.
      * @param part The part which is being added to this world.
      */
-    public void onPartAdded(final IMultiblockPart part) {
+    void onPartAdded(final IMultiblockPart part) {
+
         BlockPos worldLocation = part.getWorldPosition();
 
         if(!this.worldObj.isBlockLoaded(worldLocation)) {
+
+            this.worldObj.theProfiler.startSection("Zero CORE|Multiblock|PartAdded");
+
             // Part goes into the waiting-for-chunk-load list
             Set<IMultiblockPart> partSet;
             long chunkHash = WorldHelper.getChunkXZHashFromBlock(worldLocation);
@@ -296,6 +320,8 @@ final class MultiblockWorldRegistry {
 
                 partSet.add(part);
             }
+
+            this.worldObj.theProfiler.endSection();
         }
         else {
             // Part goes into the orphan queue, to be checked this tick
@@ -308,7 +334,10 @@ final class MultiblockWorldRegistry {
      * This part is removed from any lists in which it may be, and its machine is marked for recalculation.
      * @param part The part which is being removed.
      */
-    public void onPartRemovedFromWorld(final IMultiblockPart part) {
+    void onPartRemovedFromWorld(final IMultiblockPart part) {
+
+        this.worldObj.theProfiler.startSection("Zero CORE|Multiblock|PartRemoved");
+
         final BlockPos coord = part.getWorldPosition();
         if(coord != null) {
             long hash = WorldHelper.getChunkXZHashFromBlock(coord);
@@ -333,13 +362,16 @@ final class MultiblockWorldRegistry {
         }
 
         part.assertDetached();
+
+        this.worldObj.theProfiler.endSection();
     }
 
     /**
      * Called when the world which this World Registry represents is fully unloaded from the system.
      * Does some housekeeping just to be nice.
      */
-    public void onWorldUnloaded() {
+    void onWorldUnloaded() {
+
         controllers.clear();
         deadControllers.clear();
         dirtyControllers.clear();
@@ -365,7 +397,8 @@ final class MultiblockWorldRegistry {
      * @param chunkX Chunk X coordinate (world coordate >> 4) of the chunk that was loaded
      * @param chunkZ Chunk Z coordinate (world coordate >> 4) of the chunk that was loaded
      */
-    public void onChunkLoaded(final int chunkX, final int chunkZ) {
+    void onChunkLoaded(final int chunkX, final int chunkZ) {
+
         final long chunkHash = ChunkPos.chunkXZ2Int(chunkX, chunkZ);
         if(partsAwaitingChunkLoad.containsKey(chunkHash)) {
             synchronized(partsAwaitingChunkLoadMutex) {
@@ -384,7 +417,7 @@ final class MultiblockWorldRegistry {
      *
      * @param deadController The controller which is dead.
      */
-    public void addDeadController(MultiblockControllerBase deadController) {
+    void addDeadController(MultiblockControllerBase deadController) {
         this.deadControllers.add(deadController);
     }
 
@@ -394,7 +427,7 @@ final class MultiblockWorldRegistry {
      *
      * @param dirtyController The dirty controller.
      */
-    public void addDirtyController(MultiblockControllerBase dirtyController) {
+    void addDirtyController(MultiblockControllerBase dirtyController) {
         this.dirtyControllers.add(dirtyController);
     }
 
@@ -410,7 +443,7 @@ final class MultiblockWorldRegistry {
 
 	/* *** INTERNAL HELPERS *** */
 
-    protected IMultiblockPart getMultiblockPartFromWorld(final World world, final BlockPos position) {
+    private IMultiblockPart getMultiblockPartFromWorld(final World world, final BlockPos position) {
 
         TileEntity te = world.getTileEntity(position);
 
