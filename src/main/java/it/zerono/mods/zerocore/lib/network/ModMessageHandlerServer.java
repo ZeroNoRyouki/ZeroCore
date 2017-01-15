@@ -9,6 +9,6 @@ public abstract class ModMessageHandlerServer<MessageT extends IMessage> extends
 
     @Override
     protected IThreadListener getThreadListener(MessageContext ctx) {
-        return (WorldServer)ctx.getServerHandler().playerEntity.worldObj;
+        return (WorldServer)ctx.getServerHandler().playerEntity.getEntityWorld();
     }
 }
