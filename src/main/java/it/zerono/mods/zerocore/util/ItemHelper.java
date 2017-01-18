@@ -37,7 +37,7 @@ public final class ItemHelper {
     public static ItemStack stackFrom(@Nonnull NBTTagCompound nbt) {
         return ItemStack.loadItemStackFromNBT(nbt);
     }
-    
+
     /**
      * Create a copy of the given stack
      *
