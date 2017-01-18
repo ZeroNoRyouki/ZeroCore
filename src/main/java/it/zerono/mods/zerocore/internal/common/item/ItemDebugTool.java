@@ -76,7 +76,6 @@ public class ItemDebugTool extends Item implements IGameObject {
 
     /**
      * This is called when the item is used, before the block is activated.
-     * @param stack The Item Stack
      * @param player The Player that used the item
      * @param world The Current World
      * @param pos Target position
@@ -85,7 +84,7 @@ public class ItemDebugTool extends Item implements IGameObject {
      * @return Return PASS to allow vanilla handling, any other to skip normal code.
      */
     @Override
-    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+    public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
 
         if (player.isSneaking() != WorldHelper.calledByLogicalClient(world))
             return EnumActionResult.PASS;
