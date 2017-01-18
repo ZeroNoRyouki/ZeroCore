@@ -2,6 +2,7 @@ package it.zerono.mods.zerocore.lib.item;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityItemStackHandler extends ItemStackHandler {
@@ -16,7 +17,7 @@ public class TileEntityItemStackHandler extends ItemStackHandler {
         this._linkedTE = linkedTileEntity;
     }
 
-    public TileEntityItemStackHandler(TileEntity linkedTileEntity, ItemStack[] stacks) {
+    public TileEntityItemStackHandler(TileEntity linkedTileEntity, NonNullList<ItemStack> stacks) {
         super(stacks);
         this._linkedTE = linkedTileEntity;
     }
