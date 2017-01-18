@@ -47,9 +47,9 @@ public final class CodeHelper {
     public static void sendChatMessage(@Nonnull ICommandSender sender, @Nonnull ITextComponent component) {
 
         if (sender instanceof EntityPlayer)
-            ((EntityPlayer)sender).sendStatusMessage(component, false);
+            ((EntityPlayer)sender).addChatMessage(component);
         else
-            sender.sendMessage(component);
+            sender.addChatMessage(component);
     }
 
     /**
