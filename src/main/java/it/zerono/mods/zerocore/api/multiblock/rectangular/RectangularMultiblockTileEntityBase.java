@@ -14,7 +14,7 @@ import it.zerono.mods.zerocore.api.multiblock.MultiblockControllerBase;
 import it.zerono.mods.zerocore.api.multiblock.MultiblockTileEntityBase;
 import it.zerono.mods.zerocore.api.multiblock.validation.IMultiblockValidator;
 import it.zerono.mods.zerocore.lib.BlockFacings;
-import li.cil.oc.api.event.RackMountableRenderEvent;
+import it.zerono.mods.zerocore.util.WorldHelper;
 import net.minecraft.block.Block;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -117,7 +117,7 @@ public abstract class RectangularMultiblockTileEntityBase extends MultiblockTile
 
 		for (EnumFacing facing: EnumFacing.VALUES)
 			if (facings.isSet(facing))
-				world.notifyBlockOfStateChange(position.offset(facing), blockType);
+				WorldHelper.notifyNeighborsOfStateChange(world, position.offset(facing), blockType);
 	}
 
 

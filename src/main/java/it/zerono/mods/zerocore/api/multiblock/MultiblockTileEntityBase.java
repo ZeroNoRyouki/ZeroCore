@@ -12,6 +12,7 @@ package it.zerono.mods.zerocore.api.multiblock;
 
 import it.zerono.mods.zerocore.internal.ZeroCore;
 import it.zerono.mods.zerocore.lib.block.ModTileEntity;
+import it.zerono.mods.zerocore.util.WorldHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -336,7 +337,7 @@ public abstract class MultiblockTileEntityBase extends ModTileEntity implements 
 
 	//// Helper functions for notifying neighboring blocks
 	protected void notifyNeighborsOfBlockChange() {
-		this.getWorld().notifyNeighborsOfStateChange(this.getWorldPosition(), this.getBlockType());
+		WorldHelper.notifyNeighborsOfStateChange(this.getWorld(), this.getWorldPosition(), this.getBlockType());
 	}
 
 	@Deprecated // not implemented yet

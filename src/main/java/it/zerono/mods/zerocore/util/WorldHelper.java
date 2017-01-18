@@ -1,5 +1,6 @@
 package it.zerono.mods.zerocore.util;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -12,6 +13,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.IChunkProvider;
 
+import javax.annotation.Nonnull;
 import java.util.Random;
 
 public final class WorldHelper {
@@ -181,6 +183,13 @@ public final class WorldHelper {
             newState = oldState;
 
         world.notifyBlockUpdate(position, oldState, newState, 3);
+    }
+
+    /**
+     * MC-Version independent wrapper around World::notifyNeighborsOfStateChange()
+     */
+    public static void notifyNeighborsOfStateChange(@Nonnull final World world, @Nonnull final BlockPos pos, @Nonnull final Block blockType) {
+        world.notifyNeighborsOfStateChange(pos, blockType);
     }
 
     private WorldHelper() {
