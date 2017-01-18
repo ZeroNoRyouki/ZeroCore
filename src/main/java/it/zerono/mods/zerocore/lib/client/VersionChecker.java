@@ -1,5 +1,6 @@
 package it.zerono.mods.zerocore.lib.client;
 
+import it.zerono.mods.zerocore.util.CodeHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.FMLLog;
@@ -105,7 +106,7 @@ public final class VersionChecker {
                     msg = new TextComponentTranslation("zerocore:vercheck.update2",
                             versionData.getLastVersion(), versionData.getName(), updateMessage);
 
-                evt.player.addChatMessage(msg);
+                CodeHelper.sendChatMessage(evt.player, msg);
             }
         }
     }
