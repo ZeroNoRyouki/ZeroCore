@@ -40,7 +40,7 @@ public abstract class SpiralParticle extends Particle {
         this.motionZ = newZ - this.posZ;
         this.motionY = 0.01;
 
-        this.moveEntity(this.motionX, this.motionY, this.motionZ);
+        this.move(this.motionX, this.motionY, this.motionZ);
     }
 
     protected float _angle;

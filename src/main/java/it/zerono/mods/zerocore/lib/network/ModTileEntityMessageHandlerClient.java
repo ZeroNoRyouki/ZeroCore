@@ -19,6 +19,6 @@ public abstract class ModTileEntityMessageHandlerClient<MessageT extends ModTile
     @SideOnly(Side.CLIENT)
     @Override
     protected World getWorld(MessageContext ctx) {
-        return FMLClientHandler.instance().getClient().theWorld;
+        return FMLClientHandler.instance().getClient().world;
     }
 }

@@ -53,7 +53,7 @@ public final class WorldHelper {
             return;
 
         Random rand = world.rand;
-        int howMany = MathHelper.getRandomIntegerInRange(rand, minCount, maxCount);
+        int howMany = MathHelper.getInt(rand, minCount, maxCount);
         double motionX, motionY, motionZ, pX, pY, pZ, px1, px2, py1, py2, pz1, pz2;
 
         px1 = x - offsetX + 0.5D;
@@ -71,9 +71,9 @@ public final class WorldHelper {
             motionY = rand.nextGaussian() * 0.02D;
             motionZ = rand.nextGaussian() * 0.02D;
 
-            pX = MathHelper.getRandomDoubleInRange(rand, px1, px2);
-            pY = MathHelper.getRandomDoubleInRange(rand, py1, py2);
-            pZ = MathHelper.getRandomDoubleInRange(rand, pz1, pz2);
+            pX = MathHelper.nextDouble(rand, px1, px2);
+            pY = MathHelper.nextDouble(rand, py1, py2);
+            pZ = MathHelper.nextDouble(rand, pz1, pz2);
 
             ws.spawnParticle(particle, pX, pY, pZ, howMany, motionX, motionY, motionZ, rand.nextGaussian() * 0.02D);
 
@@ -84,9 +84,9 @@ public final class WorldHelper {
                 motionY = rand.nextGaussian() * 0.02D;
                 motionZ = rand.nextGaussian() * 0.02D;
 
-                pX = MathHelper.getRandomDoubleInRange(rand, px1, px2);
-                pY = MathHelper.getRandomDoubleInRange(rand, py1, py2);
-                pZ = MathHelper.getRandomDoubleInRange(rand, pz1, pz2);
+                pX = MathHelper.nextDouble(rand, px1, px2);
+                pY = MathHelper.nextDouble(rand, py1, py2);
+                pZ = MathHelper.nextDouble(rand, pz1, pz2);
 
                 world.spawnParticle(particle, pX, pY, pZ, motionX, motionY, motionZ);
             }
@@ -129,7 +129,7 @@ public final class WorldHelper {
             entity.motionZ = 0;
         }
 
-        world.spawnEntityInWorld(entity);
+        world.spawnEntity(entity);
     }
 
     /*
@@ -153,11 +153,11 @@ public final class WorldHelper {
     }
 
     public static long getChunkXZHashFromBlock(int blockX, int blockZ) {
-        return ChunkPos.chunkXZ2Int(WorldHelper.getChunkXFromBlock(blockX), WorldHelper.getChunkZFromBlock(blockZ));
+        return ChunkPos.asLong(WorldHelper.getChunkXFromBlock(blockX), WorldHelper.getChunkZFromBlock(blockZ));
     }
 
     public static long getChunkXZHashFromBlock(BlockPos position) {
-        return ChunkPos.chunkXZ2Int(WorldHelper.getChunkXFromBlock(position), WorldHelper.getChunkZFromBlock(position));
+        return ChunkPos.asLong(WorldHelper.getChunkXFromBlock(position), WorldHelper.getChunkZFromBlock(position));
     }
 
     @Deprecated // use World.isBlockLoaded instead
