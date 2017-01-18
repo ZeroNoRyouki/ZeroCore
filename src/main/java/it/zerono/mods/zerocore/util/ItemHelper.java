@@ -7,23 +7,24 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public final class ItemHelper {
 
     /**
      * Create a stack for the item associated with the give block state
      *
-     * @param state
-     * @param amount
-     * @return
+     * @param state the source block state
+     * @param amount the number of items to put into the stack
+     * @return a newly create stack containing the specified amount of items or null if no item associated to the block state can be found
      */
-    @Nonnull
+    @Nullable
     public static ItemStack stackFrom(@Nonnull IBlockState state, int amount) {
 
         final Block block = state.getBlock();
         final Item item = Item.getItemFromBlock(block);
 
-        return new ItemStack(item, amount, item.getHasSubtypes() ? block.getMetaFromState(state) : 0);
+        return null == item ? null : new ItemStack(item, amount, item.getHasSubtypes() ? block.getMetaFromState(state) : 0);
     }
 
     /**
@@ -32,31 +33,40 @@ public final class ItemHelper {
      * @param nbt an NBT Tag Compound containing the data of the stack to create
      * @return the newly create stack
      */
-    @Nonnull
+    @Nullable
     public static ItemStack stackFrom(@Nonnull NBTTagCompound nbt) {
-        return new ItemStack(nbt);
+        return ItemStack.loadItemStackFromNBT(nbt);
     }
+    
     /**
      * Create a copy of the given stack
      *
      * @param stack the stack to duplicate
      * @return a new stack with the same properties as the one passed in
      */
-    @Nonnull
-    public static ItemStack stackFrom(@Nonnull ItemStack stack) {
-        return stack.copy();
-    }
+    @Nullable
+    public static ItemStack stackFrom(@Nullable ItemStack stack) {
 
+        if (null == stack)
+            return null;
+
+        stack = stack.copy();
+
+        if (0 == stack.stackSize)
+            stack.stackSize = 1;
+
+        return stack;
+    }
 
     /**
      * Check if the give stack is a valid stack
      *
      * @param stack the stack to query
-     * @return MC 1.10.2  : true if the stack is non null, false otherwise
+     * @return MC 1.10.2  : true if the stack is not null and not empty, false otherwise
      *         MC 1.11.2+ : true if the stack is not empty, false otherwise
      */
-    public static boolean stackIsValid(@Nonnull ItemStack stack) {
-        return !stack.isEmpty();
+    public static boolean stackIsValid(@Nullable ItemStack stack) {
+        return null != stack && stack.stackSize > 0;
     }
 
     /**
@@ -65,8 +75,8 @@ public final class ItemHelper {
      * @param stack the stack to query
      * @return true if the stack is empty, false otherwise
      */
-    public static boolean stackIsEmpty(@Nonnull ItemStack stack) {
-        return stack.isEmpty();
+    public static boolean stackIsEmpty(@Nullable ItemStack stack) {
+        return null == stack || stack.stackSize <= 0;
     }
 
     /**
@@ -75,8 +85,8 @@ public final class ItemHelper {
      * @param stack the stack to query
      * @return the number of items inside the stack
      */
-    public static int stackGetSize(@Nonnull ItemStack stack) {
-        return stack.getCount();
+    public static int stackGetSize(@Nullable ItemStack stack) {
+        return null == stack ? 0 : stack.stackSize;
     }
 
     /**
@@ -85,16 +95,16 @@ public final class ItemHelper {
      * @param stack the stack to query
      * @return the modified stack or an empty stack
      */
-    @Nonnull
+    @Nullable
     public static ItemStack stackSetSize(@Nonnull ItemStack stack, int amount) {
 
         if (amount <= 0) {
 
-            stack.setCount(0);
-            return ItemStack.EMPTY;
+            stack.stackSize = 0;
+            return null;
         }
 
-        stack.setCount(amount);
+        stack.stackSize = amount;
         return stack;
     }
 
@@ -105,11 +115,11 @@ public final class ItemHelper {
      * @param amount the number of items to add or subtract from the stack
      * @return the modified stack or an empty stack
      */
-    @Nonnull
+    @Nullable
     public static ItemStack stackAdd(@Nonnull ItemStack stack, int amount) {
 
-        stack.grow(amount);
-        return stack;
+        stack.stackSize += amount;
+        return stack.stackSize <= 0 ? null : stack;
     }
 
     /**
@@ -121,7 +131,7 @@ public final class ItemHelper {
     @Nonnull
     public static ItemStack stackEmpty(@Nonnull ItemStack stack) {
 
-        stack.setCount(0);
+        stack.stackSize = 0;
         return stack;
     }
 
@@ -129,9 +139,9 @@ public final class ItemHelper {
      * Return an empty stack
      * @return an empty stack
      */
-    @Nonnull
+    @Nullable
     public static ItemStack stackEmpty() {
-        return ItemStack.EMPTY;
+        return null;
     }
 
     private ItemHelper() {
