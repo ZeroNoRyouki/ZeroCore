@@ -1,12 +1,16 @@
 package it.zerono.mods.zerocore.util;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,6 +39,17 @@ public final class CodeHelper {
 
     public static String i18nValue(boolean value) {
         return I18n.format(value ? "debug.zerocore.true" : "debug.zerocore.false");
+    }
+
+    /**
+     * MC-Version independent wrapper around EntityPlayer::addChatMessage()
+     */
+    public static void sendChatMessage(@Nonnull ICommandSender sender, @Nonnull ITextComponent component) {
+
+        if (sender instanceof EntityPlayer)
+            ((EntityPlayer)sender).sendStatusMessage(component, false);
+        else
+            sender.sendMessage(component);
     }
 
     /**

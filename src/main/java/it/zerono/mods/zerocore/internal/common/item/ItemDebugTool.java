@@ -3,6 +3,7 @@ package it.zerono.mods.zerocore.internal.common.item;
 import it.zerono.mods.zerocore.lib.IDebugMessages;
 import it.zerono.mods.zerocore.lib.IDebuggable;
 import it.zerono.mods.zerocore.lib.IGameObject;
+import it.zerono.mods.zerocore.util.CodeHelper;
 import it.zerono.mods.zerocore.util.OreDictionaryHelper;
 import it.zerono.mods.zerocore.util.WorldHelper;
 import net.minecraft.block.state.IBlockState;
@@ -134,9 +135,9 @@ public class ItemDebugTool extends Item implements IGameObject {
 
     private void sendMessages(final EntityPlayer player, final ITextComponent header, final MessagesPool pool) {
 
-        player.addChatMessage(header);
+        CodeHelper.sendChatMessage(player, header);
         for(ITextComponent message : pool.MESSAGES)
-            player.addChatMessage(message);
+            CodeHelper.sendChatMessage(player, message);
     }
 
     @Override
