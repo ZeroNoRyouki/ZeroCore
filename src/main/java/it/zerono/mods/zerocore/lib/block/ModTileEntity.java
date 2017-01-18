@@ -164,7 +164,7 @@ public abstract class ModTileEntity extends TileEntity {
     }
 
     public void callNeighborBlockChange() {
-        this.getWorld().notifyNeighborsOfStateChange(this.getPos(), this.getBlockType());
+        WorldHelper.notifyNeighborsOfStateChange(this.getWorld(), this.getPos(), this.getBlockType());
     }
 
     @Deprecated // not implemented
