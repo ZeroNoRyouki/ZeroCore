@@ -30,7 +30,7 @@ public final class OreDictionaryHelper {
     }
 
     public static String[] getOreNames(@Nonnull IBlockState state) {
-        return OreDictionaryHelper.getOreNames(ItemHelper.createItemStack(state, 1));
+        return OreDictionaryHelper.getOreNames(ItemHelper.stackFrom(state, 1));
     }
 
     public static String getFirstOreName(ItemStack stack) {
@@ -41,7 +41,7 @@ public final class OreDictionaryHelper {
     }
 
     public static String getFirstOreName(@Nonnull IBlockState state) {
-        return OreDictionaryHelper.getFirstOreName(ItemHelper.createItemStack(state, 1));
+        return OreDictionaryHelper.getFirstOreName(ItemHelper.stackFrom(state, 1));
     }
 
     /**
