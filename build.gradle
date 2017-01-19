@@ -23,7 +23,7 @@ version = "${config.mod_version_major}.${config.mod_version_api}.${config.mod_ve
 group = "${config.group_id}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "zerocore-${config.minecraft_version}"
 
-ext.dependencies = "required-after:Forge@[${config.forge_version_minDep},${config.forge_version_maxDep})"
+ext.dependencies = "required-after:forge@[${config.forge_version_minDep},${config.forge_version_maxDep})"
 ext.fullVersion = project.config.minecraft_version + '-' + project.version
 
 minecraft {
@@ -76,7 +76,7 @@ compileJava.doFirst {
     String source = file.getText('UTF-8')
             .replaceAll('version = "0.0.0.0"', 'version = "' + project.ext.fullVersion + '"')
             .replaceAll('acceptedMinecraftVersions = ""', 'acceptedMinecraftVersions = "' + config.minecraft_version + '"')
-            .replaceAll('dependencies = "required-after:Forge"', 'dependencies = "' + project.ext.dependencies + '"')
+            .replaceAll('dependencies = "required-after:forge"', 'dependencies = "' + project.ext.dependencies + '"')
 
     file.write(source, 'UTF-8')
 }

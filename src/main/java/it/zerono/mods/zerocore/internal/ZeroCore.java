@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid = References.MOD_ID, name = References.MOD_NAME, acceptedMinecraftVersions = "",
-        dependencies = "required-after:Forge", version = "0.0.0.0")
+        dependencies = "required-after:forge", version = "0.0.0.0")
 public final class ZeroCore implements IModInitializationHandler {
 
     public static CommonProxy getProxy() {
