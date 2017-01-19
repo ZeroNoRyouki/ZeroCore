@@ -13,7 +13,7 @@ zerocore:api.multiblock.validation.invalid_part_for_interior=Block at %1$d, %2$d
 zerocore:api.multiblock.validation.invalid_foreign_part=Block at %1$d, %2$d, %3$d belong to another machine
 
 # Items
-item.zerocore:debugTool.name=Debug Tool
+item.zerocore:debugtool.name=Debug Tool
 zerocore:debugTool.tile.header=%1$s side debug analysis report of Tile Entity at %2$d, %3$d, %4$d
 zerocore:debugTool.block.header=%1$s side debug analysis report of block at %2$d, %3$d, %4$d
 zerocore:debugTool.block.notfound=The block is not registered in the Ore Dictionary

@@ -13,7 +13,7 @@ zerocore:api.multiblock.validation.invalid_part_for_interior=Il blocco alle coor
 zerocore:api.multiblock.validation.invalid_foreign_part=Il blocco alle coordinate %1$d, %2$d, %3$d appartiene ad un'altra struttura.
 
 # Items
-item.zerocore:debugTool.name=Debug Tool
+item.zerocore:debugtool.name=Debug Tool
 zerocore:debugTool.tile.header=Analisi %1$s side della Tile Entity alle coordinate %2$d, %3$d, %4$d
 zerocore:debugTool.block.header=Analisi %1$s side del blocco alle coordinate %2$d, %3$d, %4$d
 zerocore:debugTool.block.notfound=Il blocco non è registrato nell'Ore Dictionary
