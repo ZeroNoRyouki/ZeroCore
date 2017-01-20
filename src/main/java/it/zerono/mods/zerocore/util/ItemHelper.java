@@ -105,7 +105,7 @@ public final class ItemHelper {
      * @return the number of items inside the stack
      */
     public static int stackGetSize(@Nullable ItemStack stack) {
-        return null == stack ? 0 : stack.stackSize;
+        return ItemHelper.stackIsEmpty(stack) ? 0 : stack.stackSize;
     }
 
     /**
@@ -121,7 +121,7 @@ public final class ItemHelper {
         if (amount <= 0) {
 
             stack.stackSize = 0;
-            return null;
+            return ItemHelper.stackEmpty();
         }
 
         stack.stackSize = amount;
@@ -139,7 +139,7 @@ public final class ItemHelper {
     public static ItemStack stackAdd(@Nonnull ItemStack stack, int amount) {
 
         stack.stackSize += amount;
-        return stack.stackSize <= 0 ? null : stack;
+        return stack.stackSize <= 0 ? ItemHelper.stackEmpty() : stack;
     }
 
     /**
