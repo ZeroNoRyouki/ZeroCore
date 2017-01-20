@@ -7,15 +7,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public final class ItemHelper {
 
     /**
      * Create a stack for the item associated with the give block state
      *
-     * @param state
-     * @param amount
-     * @return
+     * @param state the source block state
+     * @param amount the number of items to put into the stack
+     * @return a newly create stack containing the specified amount of items or null if no item associated to the block state can be found
      */
     @Nonnull
     public static ItemStack stackFrom(@Nonnull IBlockState state, int amount) {
@@ -36,6 +37,7 @@ public final class ItemHelper {
     public static ItemStack stackFrom(@Nonnull NBTTagCompound nbt) {
         return new ItemStack(nbt);
     }
+
     /**
      * Create a copy of the given stack
      *
@@ -47,6 +49,24 @@ public final class ItemHelper {
         return stack.copy();
     }
 
+    /**
+     * Create a copy of the given stack and modify it's size
+     *
+     * @param stack the stack to duplicate
+     * @param amount the new size of the stack
+     * @return a new stack with the same properties as the one passed in
+     */
+    @Nullable
+    public static ItemStack stackFrom(@Nullable ItemStack stack, int amount) {
+
+        stack = ItemHelper.stackFrom(stack);
+
+        if (ItemHelper.stackIsEmpty(stack))
+            return ItemHelper.stackEmpty();
+
+        ItemHelper.stackSetSize(stack, amount);
+        return stack;
+    }
 
     /**
      * Check if the give stack is a valid stack
@@ -91,7 +111,7 @@ public final class ItemHelper {
         if (amount <= 0) {
 
             stack.setCount(0);
-            return ItemStack.EMPTY;
+            return ItemHelper.stackEmpty();
         }
 
         stack.setCount(amount);
