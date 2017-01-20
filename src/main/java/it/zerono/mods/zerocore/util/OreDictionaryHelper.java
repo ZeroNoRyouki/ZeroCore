@@ -11,7 +11,7 @@ public final class OreDictionaryHelper {
 
     public static String[] getOreNames(ItemStack stack) {
 
-        if (null == stack)
+        if (ItemHelper.stackIsEmpty(stack))
             return null;
 
         String[] names;
@@ -35,7 +35,7 @@ public final class OreDictionaryHelper {
 
     public static String getFirstOreName(ItemStack stack) {
 
-        String[] names = null != stack ? OreDictionaryHelper.getOreNames(stack) : null;
+        String[] names = ItemHelper.stackIsValid(stack) ? OreDictionaryHelper.getOreNames(stack) : null;
 
         return null != names && names.length > 0 ? names[0] : "";
     }
