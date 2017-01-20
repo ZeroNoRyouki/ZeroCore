@@ -47,14 +47,33 @@ public final class ItemHelper {
     @Nullable
     public static ItemStack stackFrom(@Nullable ItemStack stack) {
 
-        if (null == stack)
-            return null;
+        if (ItemHelper.stackIsEmpty(stack))
+            return ItemHelper.stackEmpty();
 
         stack = stack.copy();
 
         if (0 == stack.stackSize)
             stack.stackSize = 1;
 
+        return stack;
+    }
+
+    /**
+     * Create a copy of the given stack and modify it's size
+     *
+     * @param stack the stack to duplicate
+     * @param amount the new size of the stack
+     * @return a new stack with the same properties as the one passed in
+     */
+    @Nullable
+    public static ItemStack stackFrom(@Nullable ItemStack stack, int amount) {
+
+        stack = ItemHelper.stackFrom(stack);
+
+        if (ItemHelper.stackIsEmpty(stack))
+            return ItemHelper.stackEmpty();
+
+        ItemHelper.stackSetSize(stack, amount);
         return stack;
     }
 
@@ -93,6 +112,7 @@ public final class ItemHelper {
      * Set the number of items inside a stack
      *
      * @param stack the stack to query
+     * @param amount the new size of the stack
      * @return the modified stack or an empty stack
      */
     @Nullable
