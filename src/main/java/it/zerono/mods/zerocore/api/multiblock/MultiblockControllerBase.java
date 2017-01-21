@@ -372,7 +372,6 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 	 * Check if the machine is whole or not.
 	 * If the machine was not whole, but now is, assemble the machine.
 	 * If the machine was whole, but no longer is, disassemble the machine.
-	 * @return 
 	 */
 	public void checkIfMachineIsWhole() {
 		AssemblyState oldState = this.assemblyState;
@@ -786,7 +785,6 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 	/**
 	 * Called when this machine may need to check for blocks that are no
 	 * longer physically connected to the reference coordinate.
-	 * @return
 	 */
 	public Set<IMultiblockPart> checkForDisconnections() {
 		if(!this.shouldCheckForDisconnections) {
