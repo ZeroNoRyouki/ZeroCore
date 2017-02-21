@@ -77,6 +77,8 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 	private ValidationError lastValidationError;
 	
 	protected boolean debugMode;
+
+	//private boolean _clientValidationRequested;
 	
 	protected MultiblockControllerBase(World world) {
 		// Multiblock stuff
@@ -93,6 +95,7 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 		lastValidationError = null;
 		
 		debugMode = false;
+		//this._clientValidationRequested = false;
 	}
 
 	public void setDebugMode(boolean active) {
@@ -1020,6 +1023,86 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 	 */
 	protected boolean doesPartBelong(IMultiblockPart part) {
 		return this == part.getMultiblockController() || this.connectedParts.contains(part);
+	}
+
+	/*
+	protected void requestClientValidation() {
+		this._clientValidationRequested = true;
+	}
+
+	protected boolean isClientValidationRequested() {
+		return this._clientValidationRequested;
+	}
+
+	void beginClientValidation(final EntityPlayerMP player) {
+
+		this._clientValidationRequested = false;
+		PacketHandler.INSTANCE.sendTo(new ClientMultiblockValidationRequest(this), player);
+	}
+
+	/ **
+	 * Called on the server to fill in the structure data for a validation request about to be sent to the client
+	 * @param data the buffer to write the data to
+	 * /
+	public void fillClientValidationRequest(final ByteBuf data) {
+
+		data.writeInt(this.minimumCoord.getX());
+		data.writeInt(this.minimumCoord.getY());
+		data.writeInt(this.minimumCoord.getZ());
+
+		data.writeInt(this.maximumCoord.getX());
+		data.writeInt(this.maximumCoord.getY());
+		data.writeInt(this.maximumCoord.getZ());
+	}
+
+	/ **
+	 * Called on the client to process a structure validation request from the server
+	 * @param serverReferenceCoord the reference coordinates on the server
+	 * @param data the structure data
+	 * @return return true if the client structure match the server one. false otherwise
+	 * /
+	public boolean processClientValidationRequest(final BlockPos serverReferenceCoord, final ByteBuf data) {
+
+		if (!this.referenceCoord.equals(serverReferenceCoord))
+			return false;
+
+		final BlockPos serverMinCoord = new BlockPos(data.readInt(), data.readInt(), data.readInt());
+		final BlockPos serverMaxCoord = new BlockPos(data.readInt(), data.readInt(), data.readInt());
+
+		return this.minimumCoord.equals(serverMinCoord) && this.maximumCoord.equals(serverMaxCoord);
+	}
+
+	/ **
+	 * Called on the client to fill in the structure data for a validation response about to be sent back to the server
+	 * @param data the buffer to write the data to
+	 * /
+	public void fillClientValidationResponse(final ByteBuf data) {
+
+		// client reference coordinates
+		data.writeInt(this.referenceCoord.getX());
+		data.writeInt(this.referenceCoord.getY());
+		data.writeInt(this.referenceCoord.getZ());
+
+		// client minimumCoord
+		data.writeInt(this.minimumCoord.getX());
+		data.writeInt(this.minimumCoord.getY());
+		data.writeInt(this.minimumCoord.getZ());
+
+		// client maximumCoord
+		data.writeInt(this.maximumCoord.getX());
+		data.writeInt(this.maximumCoord.getY());
+		data.writeInt(this.maximumCoord.getZ());
+	}
+
+	/ **
+	 * Called on the server to process a structure validation response from the client. Override in the multiblock shape
+	 * @param data the structure data
+	 * /
+	public void processClientValidationResponse(final ByteBuf data) {
+	}
+	*/
+
+	public void forceStructureUpdate(final World world) {
 	}
 
 	private static final IMultiblockRegistry REGISTRY;

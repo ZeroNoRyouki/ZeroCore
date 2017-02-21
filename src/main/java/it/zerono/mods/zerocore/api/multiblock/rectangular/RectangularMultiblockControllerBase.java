@@ -13,6 +13,7 @@ package it.zerono.mods.zerocore.api.multiblock.rectangular;
 import it.zerono.mods.zerocore.api.multiblock.MultiblockControllerBase;
 import it.zerono.mods.zerocore.api.multiblock.validation.IMultiblockValidator;
 import it.zerono.mods.zerocore.api.multiblock.validation.ValidationError;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -176,6 +177,30 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 		}
 
 		return true;
-	}	
-	
+	}
+
+	@Override
+	public void forceStructureUpdate(final World world) {
+
+		final BlockPos minCoord = this.getMinimumCoord();
+		final BlockPos maxCoord = this.getMaximumCoord();
+		final int minX = minCoord.getX();
+		final int minY = minCoord.getY();
+		final int minZ = minCoord.getZ();
+		final int maxX = maxCoord.getX();
+		final int maxY = maxCoord.getY();
+		final int maxZ = maxCoord.getZ();
+
+		for(int x = minX; x <= maxX; x++) {
+			for (int y = minY; y <= maxY; y++) {
+				for (int z = minZ; z <= maxZ; z++) {
+
+					BlockPos pos = new BlockPos(x, y, z);
+					IBlockState state = world.getBlockState(pos);
+
+					world.notifyBlockUpdate(pos, state, state, 3);
+				}
+			}
+		}
+	}
 }

@@ -375,6 +375,38 @@ public abstract class MultiblockTileEntityBase extends ModTileEntity implements 
 			controller.markMultiblockForRenderUpdate();
 	}
 
+	/*
+	public boolean checkAndSendLastValidationError(final EntityPlayer player) {
+
+		final MultiblockControllerBase controller = this.getMultiblockController();
+		ITextComponent message = null;
+
+		if (null != controller) {
+
+			ValidationError error = controller.getLastError();
+
+			if (null != error) {
+
+				message = error.getChatMessage();
+
+				if (player instanceof EntityPlayerMP && controller.isClientValidationRequested())
+					controller.beginClientValidation((EntityPlayerMP)player);
+			}
+
+		} else {
+
+			message = new TextComponentTranslation("zerocore:api.multiblock.validation.block_not_connected");
+		}
+
+		if (null != message) {
+
+			CodeHelper.sendChatMessage(player, message);
+			return true;
+		}
+
+		return false;
+	}*/
+
     private static final IMultiblockRegistry REGISTRY;
 
     static {
