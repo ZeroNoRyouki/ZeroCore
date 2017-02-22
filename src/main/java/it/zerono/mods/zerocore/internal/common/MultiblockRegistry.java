@@ -72,7 +72,9 @@ final class MultiblockRegistry implements IMultiblockRegistry {
         if (this._registries.containsKey(world))
             this._registries.get(world).addDirtyController(controller);
         else
-            throw new IllegalArgumentException("Adding a dirty controller to a world that has no registered controllers!");
+            //throw new IllegalArgumentException("Adding a dirty controller to a world that has no registered controllers!");
+            FMLLog.severe("Adding a dirty controller to a world that has no registered controllers! [ID=%d]",
+                    null != world ? world.provider.getDimension() : Integer.MIN_VALUE);
     }
 
     /*
