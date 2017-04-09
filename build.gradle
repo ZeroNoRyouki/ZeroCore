@@ -51,6 +51,24 @@ configurations {
 dependencies {
 }
 
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources {
+            srcDir 'resources'
+        }
+    }
+    api {
+        java {
+            srcDir 'CoFHLib/src/main/java'
+            exclude '**/cofh/lib/**'
+            exclude '**/IGeneratorParser.java'
+        }
+    }
+}
+
 processResources  {
 
     // this will ensure that this task is redone when the versions change.
