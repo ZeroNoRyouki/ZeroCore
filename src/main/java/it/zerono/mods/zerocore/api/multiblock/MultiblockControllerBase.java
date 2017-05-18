@@ -147,7 +147,9 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 		}
 		else if(coord.compareTo(referenceCoord) < 0) {
 			TileEntity te = this.WORLD.getTileEntity(referenceCoord);
-			((IMultiblockPart)te).forfeitMultiblockSaveDelegate();
+
+			if (null != te)
+				((IMultiblockPart)te).forfeitMultiblockSaveDelegate();
 			
 			referenceCoord = coord;
 			part.becomeMultiblockSaveDelegate();
