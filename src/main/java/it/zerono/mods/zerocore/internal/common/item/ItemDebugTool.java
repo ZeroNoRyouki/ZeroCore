@@ -5,7 +5,7 @@ import it.zerono.mods.zerocore.lib.IDebuggable;
 import it.zerono.mods.zerocore.lib.IGameObject;
 import it.zerono.mods.zerocore.util.CodeHelper;
 import it.zerono.mods.zerocore.util.OreDictionaryHelper;
-import it.zerono.mods.zerocore.util.WorldHelper;
+import it.zerono.mods.zerocore.lib.world.WorldHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
@@ -90,7 +90,7 @@ public class ItemDebugTool extends Item implements IGameObject {
         if (player.isSneaking() != WorldHelper.calledByLogicalClient(world))
             return EnumActionResult.PASS;
 
-        final TileEntity te = world.getTileEntity(pos);
+        final TileEntity te = WorldHelper.getTile(world, pos);
 
         if (te instanceof IDebuggable) {
 

@@ -12,7 +12,7 @@ package it.zerono.mods.zerocore.internal.common;
 
 import it.zerono.mods.zerocore.api.multiblock.IMultiblockPart;
 import it.zerono.mods.zerocore.api.multiblock.MultiblockControllerBase;
-import it.zerono.mods.zerocore.util.WorldHelper;
+import it.zerono.mods.zerocore.lib.world.WorldHelper;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -399,7 +399,7 @@ final class MultiblockWorldRegistry {
      */
     void onChunkLoaded(final int chunkX, final int chunkZ) {
 
-        final long chunkHash = ChunkPos.chunkXZ2Int(chunkX, chunkZ);
+        final long chunkHash = ChunkPos.asLong(chunkX, chunkZ);
         if(partsAwaitingChunkLoad.containsKey(chunkHash)) {
             synchronized(partsAwaitingChunkLoadMutex) {
                 if(partsAwaitingChunkLoad.containsKey(chunkHash)) {
@@ -445,7 +445,7 @@ final class MultiblockWorldRegistry {
 
     private IMultiblockPart getMultiblockPartFromWorld(final World world, final BlockPos position) {
 
-        TileEntity te = world.getTileEntity(position);
+        TileEntity te = WorldHelper.getTile(world, position);
 
         return te instanceof IMultiblockPart ? (IMultiblockPart)te : null;
     }

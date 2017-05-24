@@ -14,7 +14,7 @@ import it.zerono.mods.zerocore.api.multiblock.MultiblockControllerBase;
 import it.zerono.mods.zerocore.api.multiblock.MultiblockTileEntityBase;
 import it.zerono.mods.zerocore.api.multiblock.validation.IMultiblockValidator;
 import it.zerono.mods.zerocore.lib.BlockFacings;
-import it.zerono.mods.zerocore.util.WorldHelper;
+import it.zerono.mods.zerocore.lib.world.WorldHelper;
 import net.minecraft.block.Block;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;

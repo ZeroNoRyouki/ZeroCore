@@ -1,15 +1,17 @@
 package it.zerono.mods.zerocore.lib.block;
 
-import it.zerono.mods.zerocore.util.WorldHelper;
+import it.zerono.mods.zerocore.lib.world.WorldHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -24,7 +26,7 @@ public abstract class ModTileEntity extends TileEntity {
 
         BlockPos position = this.getPos();
 
-        if (this.getWorld().getTileEntity(position) != this)
+        if (this != this.getTile(position))
             return false;
 
         return entityplayer.getDistanceSq((double)position.getX() + 0.5D, (double)position.getY() + 0.5D,
@@ -185,5 +187,25 @@ public abstract class ModTileEntity extends TileEntity {
 
         this.markDirty();
         WorldHelper.notifyBlockUpdate(this.getWorld(), this.getPos(), null, null);
+    }
+
+    /***
+     * Get a TileEntity from the world associated to this TileEntity
+     * @param position the position of the TileEntity in the world
+     * @return the TileEntity, or null
+     */
+    @Nullable
+    protected TileEntity getTile(@Nonnull final BlockPos position) {
+        return WorldHelper.getTile(this.getWorld(), position);
+    }
+
+    /***
+     * Get a TileEntity adjacent to this TileEntity
+     * @param facing facing to load the TileEntity from
+     * @return the TileEntity, or null
+     */
+    @Nullable
+    protected TileEntity getTile(@Nonnull final EnumFacing facing) {
+        return WorldHelper.getTile(this.getWorld(), this.getPos().offset(facing));
     }
 }

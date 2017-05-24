@@ -12,7 +12,7 @@ package it.zerono.mods.zerocore.api.multiblock;
 
 import it.zerono.mods.zerocore.internal.ZeroCore;
 import it.zerono.mods.zerocore.lib.block.ModTileEntity;
-import it.zerono.mods.zerocore.util.WorldHelper;
+import it.zerono.mods.zerocore.lib.world.WorldHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -20,6 +20,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLLog;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -309,7 +311,7 @@ public abstract class MultiblockTileEntityBase extends ModTileEntity implements 
 		for (EnumFacing facing : EnumFacing.VALUES) {
 
 			neighborPosition = partPosition.offset(facing);
-			te = world.getTileEntity(neighborPosition);
+			te = WorldHelper.getTile(world, neighborPosition);
 
 			if (te instanceof IMultiblockPart)
 				neighborParts.add((IMultiblockPart)te);

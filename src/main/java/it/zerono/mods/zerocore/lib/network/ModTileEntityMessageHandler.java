@@ -1,5 +1,6 @@
 package it.zerono.mods.zerocore.lib.network;
 
+import it.zerono.mods.zerocore.lib.world.WorldHelper;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -26,7 +27,7 @@ public abstract class ModTileEntityMessageHandler<MessageT extends ModTileEntity
             return;
         }
 
-        final TileEntity tileEntity = world.getTileEntity(position);
+        final TileEntity tileEntity = WorldHelper.getTile(world, position);
 
         if (null != tileEntity) {
 
