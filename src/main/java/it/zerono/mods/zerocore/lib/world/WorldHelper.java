@@ -5,15 +5,21 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.ChunkCache;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Random;
 
 public final class WorldHelper {
@@ -190,6 +196,25 @@ public final class WorldHelper {
      */
     public static void notifyNeighborsOfStateChange(@Nonnull final World world, @Nonnull final BlockPos pos, @Nonnull final Block blockType) {
         world.notifyNeighborsOfStateChange(pos, blockType, false);
+    }
+
+    @Nullable
+    private static TileEntity getTile(@Nonnull IBlockAccess access, @Nonnull BlockPos origin) {
+
+        if (access instanceof ChunkCache)
+            return ((ChunkCache)access).getTileEntity(origin, Chunk.EnumCreateEntityType.CHECK);
+        else
+            return access.getTileEntity(origin);
+    }
+
+    @Nullable
+    private static TileEntity getTile(@Nonnull IBlockAccess access, @Nonnull BlockPos origin, @Nonnull EnumFacing facing) {
+        return getTile(access, origin.offset(facing));
+    }
+
+    @Nullable
+    private static TileEntity getTile(@Nonnull TileEntity origin, @Nonnull EnumFacing facing) {
+        return getTile(origin.getWorld(), origin.getPos().offset(facing));
     }
 
     private WorldHelper() {
