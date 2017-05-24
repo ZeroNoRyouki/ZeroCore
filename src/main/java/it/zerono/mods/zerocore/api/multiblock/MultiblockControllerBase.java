@@ -14,7 +14,7 @@ import it.zerono.mods.zerocore.api.multiblock.validation.IMultiblockValidator;
 import it.zerono.mods.zerocore.api.multiblock.validation.ValidationError;
 import it.zerono.mods.zerocore.internal.ZeroCore;
 import it.zerono.mods.zerocore.lib.block.ModTileEntity;
-import it.zerono.mods.zerocore.util.WorldHelper;
+import it.zerono.mods.zerocore.lib.world.WorldHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -23,6 +23,8 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.fml.common.FMLLog;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
@@ -146,7 +148,8 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 			part.becomeMultiblockSaveDelegate();
 		}
 		else if(coord.compareTo(referenceCoord) < 0) {
-			TileEntity te = this.WORLD.getTileEntity(referenceCoord);
+
+			TileEntity te = this.getTile();
 
 			if (null != te)
 				((IMultiblockPart)te).forfeitMultiblockSaveDelegate();
@@ -478,7 +481,9 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 	private void _onAssimilated(MultiblockControllerBase otherController) {
 		if(referenceCoord != null) {
 			if (this.WORLD.isBlockLoaded(this.referenceCoord)) {
-				TileEntity te = this.WORLD.getTileEntity(this.referenceCoord);
+
+				TileEntity te = this.getTile();
+
 				if(te instanceof IMultiblockPart) {
 					((IMultiblockPart)te).forfeitMultiblockSaveDelegate();
 				}
@@ -775,9 +780,13 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 	 * Checks all of the parts in the controller. If any are dead or do not exist in the world, they are removed.
 	 */
 	private void auditParts() {
+
 		HashSet<IMultiblockPart> deadParts = new HashSet<IMultiblockPart>();
-		for(IMultiblockPart part : connectedParts) {
-			if(part.isPartInvalid() || WORLD.getTileEntity(part.getWorldPosition()) != part) {
+
+		for (final IMultiblockPart part : connectedParts) {
+
+			if (part.isPartInvalid() || part != this.getTile(part.getWorldPosition())) {
+
 				onDetachBlock(part);
 				deadParts.add(part);
 			}
@@ -814,7 +823,8 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 
 		int originalSize = connectedParts.size();
 
-		for(IMultiblockPart part : connectedParts) {
+		for (final IMultiblockPart part : connectedParts) {
+
 			position = part.getWorldPosition();
 			// This happens during chunk unload.
 			if (!this.WORLD.isBlockLoaded(position) || part.isPartInvalid()) {
@@ -823,7 +833,8 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 				continue;
 			}
 			
-			if(WORLD.getTileEntity(position) != part) {
+			if (part != this.getTile(position)) {
+
 				deadParts.add(part);
 				onDetachBlock(part);
 				continue;
@@ -1009,7 +1020,7 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 		BlockPos referenceCoord = this.getReferenceCoord();
 		if(referenceCoord == null) { return; }
 
-		TileEntity saveTe = WORLD.getTileEntity(referenceCoord);
+		TileEntity saveTe = this.getTile(referenceCoord);
 		WORLD.markChunkDirty(referenceCoord, saveTe);
 	}
 
@@ -1105,6 +1116,25 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 	*/
 
 	public void forceStructureUpdate(final World world) {
+	}
+
+	/***
+	 * Get a TileEntity at referenceCoord from the world associated to this controller
+	 * @return the TileEntity, or null
+	 */
+	@Nullable
+	protected TileEntity getTile() {
+		return WorldHelper.getTile(this.WORLD, this.referenceCoord);
+	}
+
+	/***
+	 * Get a TileEntity from the world associated to this controller
+	 * @param position
+	 * @return the TileEntity, or null
+	 */
+	@Nullable
+	protected TileEntity getTile(@Nonnull final BlockPos position) {
+		return WorldHelper.getTile(this.WORLD, position);
 	}
 
 	private static final IMultiblockRegistry REGISTRY;
