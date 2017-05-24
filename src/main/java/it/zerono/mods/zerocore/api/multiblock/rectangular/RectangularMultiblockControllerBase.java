@@ -77,7 +77,7 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 				for(int z = minZ; z <= maxZ; z++) {
 					// Okay, figure out what sort of block this should be.
 					
-					te = this.WORLD.getTileEntity(new BlockPos(x, y, z));
+					te = this.getTile(new BlockPos(x, y, z));
 					if(te instanceof RectangularMultiblockTileEntityBase) {
 						part = (RectangularMultiblockTileEntityBase)te;
 						

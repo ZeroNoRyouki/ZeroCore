@@ -1,4 +1,4 @@
-package it.zerono.mods.zerocore.util;
+package it.zerono.mods.zerocore.lib.world;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -199,7 +199,7 @@ public final class WorldHelper {
     }
 
     @Nullable
-    private static TileEntity getTile(@Nonnull IBlockAccess access, @Nonnull BlockPos origin) {
+    public static TileEntity getTile(@Nonnull IBlockAccess access, @Nonnull BlockPos origin) {
 
         if (access instanceof ChunkCache)
             return ((ChunkCache)access).getTileEntity(origin, Chunk.EnumCreateEntityType.CHECK);
@@ -208,12 +208,12 @@ public final class WorldHelper {
     }
 
     @Nullable
-    private static TileEntity getTile(@Nonnull IBlockAccess access, @Nonnull BlockPos origin, @Nonnull EnumFacing facing) {
+    public static TileEntity getTile(@Nonnull IBlockAccess access, @Nonnull BlockPos origin, @Nonnull EnumFacing facing) {
         return getTile(access, origin.offset(facing));
     }
 
     @Nullable
-    private static TileEntity getTile(@Nonnull TileEntity origin, @Nonnull EnumFacing facing) {
+    public static TileEntity getTile(@Nonnull TileEntity origin, @Nonnull EnumFacing facing) {
         return getTile(origin.getWorld(), origin.getPos().offset(facing));
     }
 
