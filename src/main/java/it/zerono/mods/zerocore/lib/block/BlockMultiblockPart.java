@@ -23,9 +23,10 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class BlockMultiblockPart<PartType extends Enum<PartType> & IPropertyValue> extends ModBlock {
+public class BlockMultiblockPart<PartType extends Enum<PartType> & IMultiblockPartType> extends ModBlock {
 
-    public BlockMultiblockPart(@Nonnull final PartType type, @Nonnull final String blockName, @Nonnull final Material material) {
+    public BlockMultiblockPart(@Nonnull final PartType type, @Nonnull final String blockName,
+                               @Nonnull final Material material) {
 
         super(blockName, material);
         this._partType = type;
@@ -49,6 +50,20 @@ public class BlockMultiblockPart<PartType extends Enum<PartType> & IPropertyValu
     @Override
     public boolean hasTileEntity(IBlockState state) {
         return true;
+    }
+
+    /**
+     * Called throughout the code as a replacement for ITileEntityProvider.createNewTileEntity
+     * Return the same thing you would from that function.
+     * This will fall back to ITileEntityProvider.createNewTileEntity(World) if this block is a ITileEntityProvider
+     *
+     * @param world
+     * @param state
+     * @return A instance of a class extending TileEntity
+     */
+    @Override
+    public TileEntity createTileEntity(World world, IBlockState state) {
+        return this.getPartType().createTileEntity(world, state);
     }
 
     @Override
@@ -102,7 +117,8 @@ public class BlockMultiblockPart<PartType extends Enum<PartType> & IPropertyValu
 
                 if (null != message) {
 
-                    CodeHelper.sendChatMessage(player, message);
+                    //CodeHelper.sendChatMessage(player, message);
+                    CodeHelper.sendStatusMessage(player, message);
                     return true;
                 }
             }

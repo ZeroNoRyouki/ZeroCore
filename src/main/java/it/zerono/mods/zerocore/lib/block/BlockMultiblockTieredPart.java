@@ -24,28 +24,30 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class BlockMultiblockTieredPart<Tier extends Enum<Tier> & IPropertyValue,
-        PartType extends Enum<PartType> & IPropertyValue & IMultiblockDescriptorProvider<Tier>>
-        extends BlockMultiblockPart<PartType> implements IMultiblockDescriptorProvider<Tier> {
+        PartType extends Enum<PartType> & IMultiblockTieredPartType,
+        Descriptor extends MultiblockDescriptor<Tier>>
+        extends BlockMultiblockPart<PartType> implements IMultiblockDescriptorProvider {
 
-    public BlockMultiblockTieredPart(PartType type, String blockName, Material material) {
+    public BlockMultiblockTieredPart(@Nonnull final PartType type, @Nonnull final String blockName,
+                                     @Nonnull final Material material) {
 
         super(type, blockName, material);
         s_preDescriptorProvider = null;
     }
 
-    public static void preInitDescriptorProvider(@Nonnull final IMultiblockDescriptorProvider provider) {
+    public static void preInitDescriptorProvider(@Nonnull final IMultiblockTieredPartType provider) {
         s_preDescriptorProvider = provider;
     }
 
     @Nonnull
     @Override
-    public MultiblockDescriptor<Tier> getMultiblockDescriptor() {
+    public Descriptor getMultiblockDescriptor() {
 
+        final IMultiblockTieredPartType provider = null != this._partType ? this._partType : s_preDescriptorProvider;
         @SuppressWarnings("unchecked")
-        final IMultiblockDescriptorProvider<Tier> provider = null != this._partType ?
-                this._partType : (IMultiblockDescriptorProvider<Tier>)s_preDescriptorProvider;
+        final Descriptor descriptor = (Descriptor)provider.getMultiblockDescriptor();
 
-        return provider.getMultiblockDescriptor();
+        return descriptor;
     }
 
     @Override
@@ -89,6 +91,11 @@ public class BlockMultiblockTieredPart<Tier extends Enum<Tier> & IPropertyValue,
                     new ModelResourceLocation(location, String.format(mapFormat, tier.getName())));
     }
 
+    @Nonnull
+    public Tier getTierFromState(@Nonnull final IBlockState state) {
+        return state.getValue(this.getMultiblockDescriptor().getTierProperty());
+    }
+
     @Override
     public int getMetaFromState(IBlockState state) {
         return state.getValue(this.getMultiblockDescriptor().getTierProperty()).toMeta();
@@ -108,7 +115,8 @@ public class BlockMultiblockTieredPart<Tier extends Enum<Tier> & IPropertyValue,
         return state.getValue(this.getMultiblockDescriptor().getTierProperty()).toMeta();
     }
 
-    public ItemStack createItemStack(Tier tier, int amount) {
+    @Nonnull
+    public ItemStack createItemStack(@Nonnull final Tier tier, final int amount) {
         return new ItemStack(this, amount, tier.toMeta());
     }
 
@@ -124,28 +132,16 @@ public class BlockMultiblockTieredPart<Tier extends Enum<Tier> & IPropertyValue,
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
 
         if (null == this._subBlocks) {
-            /*
-            PartTier[] tiers = PartTier.RELEASED_TIERS;
-            int length = tiers.length;
 
-            this._subBlocks = new ArrayList<>(length);
-
-            for (int i = 0; i < length; ++i)
-                this._subBlocks.add(new ItemStack(item, 1, tiers[i].toMeta()));
-            */
             EnumSet<Tier> tiers = this.getMultiblockDescriptor().getActiveTiers();
 
             this._subBlocks = new ArrayList<>();
 
             for (Tier tier : tiers)
-                this._subBlocks.add(new ItemStack(item, 1, tier.toMeta()));
+                this._subBlocks.add(this.createItemStack(tier, 1));
         }
 
         list.addAll(this._subBlocks);
-    }
-
-    public Tier getTierFromState(IBlockState state) {
-        return state.getValue(this.getMultiblockDescriptor().getTierProperty());
     }
 
     @Override
@@ -166,5 +162,5 @@ public class BlockMultiblockTieredPart<Tier extends Enum<Tier> & IPropertyValue,
     }
 
     private List<ItemStack> _subBlocks;
-    private static IMultiblockDescriptorProvider s_preDescriptorProvider;
+    private static IMultiblockTieredPartType s_preDescriptorProvider;
 }

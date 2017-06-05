@@ -7,6 +7,10 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -50,6 +54,15 @@ public abstract class ModBlock extends Block implements IGameObject {
     @Override
     public int getMetaFromState(IBlockState state) {
         return 0;
+    }
+
+    public static <Tile> Tile getTileEntity(@Nonnull final IBlockAccess world, @Nonnull final BlockPos position) {
+
+        final TileEntity te = world.getTileEntity(position);
+        @SuppressWarnings("unchecked")
+        final Tile tile = null != te ? (Tile)te : null;
+
+        return tile;
     }
 
     protected ModBlock(@Nonnull final String blockName, @Nonnull final Material material) {
