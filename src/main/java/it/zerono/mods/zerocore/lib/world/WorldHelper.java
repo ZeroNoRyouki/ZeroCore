@@ -192,6 +192,15 @@ public final class WorldHelper {
     }
 
     /**
+     * An MC-Version independent way to get the dimension Id from a World
+     * @param world the world
+     * @return the dimension Id
+     */
+    public static int getDimensionId(@Nonnull final World world) {
+        return world.provider.getDimension();
+    }
+
+    /**
      * MC-Version independent wrapper around World::notifyNeighborsOfStateChange()
      */
     public static void notifyNeighborsOfStateChange(@Nonnull final World world, @Nonnull final BlockPos pos, @Nonnull final Block blockType) {
