@@ -1,5 +1,6 @@
 package it.zerono.mods.zerocore.util;
 
+import it.zerono.mods.zerocore.internal.ZeroCore;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -50,6 +51,13 @@ public final class CodeHelper {
             ((EntityPlayer)sender).addChatMessage(component);
         else
             sender.addChatMessage(component);
+    }
+
+    /**
+     * MC-Version independent wrapper around EntityPlayer::sendStatusMessage() [backported to MC 1.10.2]
+     */
+    public static void sendStatusMessage(@Nonnull final EntityPlayer player, @Nonnull final ITextComponent message) {
+        ZeroCore.getProxy().sendPlayerStatusMessage(player, message);
     }
 
     /**
