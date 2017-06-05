@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class GameObjectsHandler implements IModInitializationHandler {
 
-    private GameObjectsHandler() {
+    public GameObjectsHandler() {
 
         this._objects = new ArrayList<>();
         this._remapBlocks = new LowerCaseRemapper<>();
