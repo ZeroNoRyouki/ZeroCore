@@ -12,6 +12,6 @@ public final class ZeroItems {
     }
 
     static {
-        debugTool = ZeroCore.getProxy().register(new ItemDebugTool("debugtool"));
+        debugTool = ZeroCore.getProxy().registerGameObject(new ItemDebugTool("debugtool"));
     }
 }

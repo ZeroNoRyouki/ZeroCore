@@ -4,6 +4,7 @@ import it.zerono.mods.zerocore.api.multiblock.IMultiblockRegistry;
 import it.zerono.mods.zerocore.internal.common.init.ZeroItems;
 import it.zerono.mods.zerocore.lib.IGameObject;
 import it.zerono.mods.zerocore.lib.IModInitializationHandler;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -18,13 +19,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import javax.annotation.Nonnull;
 
 public class CommonProxy implements IModInitializationHandler {
-
-    public <T extends Item & IGameObject> T register(T item) {
-
-        GameRegistry.register(item);
-        item.onPostRegister();
-        return item;
-    }
 
     public IMultiblockRegistry initMultiblockRegistry() {
 
@@ -46,6 +40,22 @@ public class CommonProxy implements IModInitializationHandler {
 
     @Override
     public void onPostInit(FMLPostInitializationEvent event) {
+    }
+
+    @Nonnull
+    public <I extends Item & IGameObject> I registerGameObject(@Nonnull I item) {
+
+        GameRegistry.register(item);
+        item.onPostRegister();
+        return item;
+    }
+
+    @Nonnull
+    public <B extends Block & IGameObject> B registerGameObject(@Nonnull B block) {
+
+        GameRegistry.register(block);
+        block.onPostRegister();
+        return block;
     }
 
     public void sendPlayerStatusMessage(@Nonnull final EntityPlayer player, @Nonnull final ITextComponent message) {
