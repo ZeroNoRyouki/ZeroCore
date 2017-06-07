@@ -10,7 +10,7 @@ public abstract class TierDescriptor<Tier extends Enum<Tier> & IPropertyValue> {
     public final int MaxSizeY;
     public final int MaxSizeZ;
 
-    TierDescriptor(@Nonnull final Tier tier, final int maxX, final int maxY, final int maxZ) {
+    protected TierDescriptor(@Nonnull final Tier tier, final int maxX, final int maxY, final int maxZ) {
 
         this.Tier = tier;
         this.MaxSizeX = maxX;
