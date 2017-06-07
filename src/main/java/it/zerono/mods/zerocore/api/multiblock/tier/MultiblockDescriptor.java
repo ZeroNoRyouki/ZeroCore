@@ -50,9 +50,15 @@ public abstract class MultiblockDescriptor<Tier extends Enum<Tier> & IPropertyVa
         }
     }
 
-    @Nullable
+    @Nonnull
     public TierDescriptor<Tier> getTierDescriptor(@Nonnull final Tier tier) {
-        return _tierData.get(tier);
+
+        final TierDescriptor<Tier> descriptor = this._tierData.get(tier);
+
+        if (null == descriptor)
+            throw new RuntimeException(String.format("No descriptor exist for tier %s", tier.getName()));
+
+        return descriptor;
     }
 
     @Nonnull
