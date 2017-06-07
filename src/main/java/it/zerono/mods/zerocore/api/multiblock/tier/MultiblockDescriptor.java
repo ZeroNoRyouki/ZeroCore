@@ -51,7 +51,7 @@ public abstract class MultiblockDescriptor<Tier extends Enum<Tier> & IPropertyVa
     }
 
     @Nullable
-    public TierDescriptor getTierDescriptor(@Nonnull final Tier tier) {
+    public TierDescriptor<Tier> getTierDescriptor(@Nonnull final Tier tier) {
         return _tierData.get(tier);
     }
 
@@ -122,6 +122,6 @@ public abstract class MultiblockDescriptor<Tier extends Enum<Tier> & IPropertyVa
     private final EnumSet<Tier> _activeTiers;
     private final HashMap<Integer, Tier> _tierMetaMap;
     private final Tier _defaultTier;
-    private final HashMap<Tier, TierDescriptor> _tierData;
+    private final HashMap<Tier, TierDescriptor<Tier>> _tierData;
     private PropertyEnum<Tier> _tierProperty;
 }
