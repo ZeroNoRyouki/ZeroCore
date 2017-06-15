@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
@@ -119,4 +120,47 @@ public final class CodeHelper {
         return false;
     }
 
+    /**
+     * Math helper function - Linear interpolate between two numbers
+     * @param from
+     * @param to
+     * @param modifier
+     * @return
+     */
+    public static float mathLerp(float from, float to, float modifier) {
+
+        modifier = Math.min(1.0f, Math.max(0.0f, modifier));
+        return from + modifier * (to - from);
+    }
+
+    /**
+     * Math helper function - Calculate the volume of the cube defined by two coordinates
+     * @param minimum Minimum coordinate
+     * @param maximum Maximum coordinate
+     * @return the cube's volume, in blocks
+     */
+    public static int mathVolume(final BlockPos minimum, final BlockPos maximum) {
+        return (minimum == null || maximum == null) ? 0 :
+                CodeHelper.mathVolume(minimum.getX(), minimum.getY(), minimum.getZ(),
+                        maximum.getX(), maximum.getY(), maximum.getZ());
+    }
+
+    /**
+     * Math helper function - Calculate the volume of the cube defined by two coordinates.
+     * @param x1 minimum X coordinate
+     * @param y1 minimum Y coordinate
+     * @param z1 minimum Z coordinate
+     * @param x2 maximum X coordinate
+     * @param y2 maximum Y coordinate
+     * @param z2 maximum Z coordinate
+     * @return the cube's volume, in blocks
+     */
+    public static int mathVolume(int x1, int y1, int z1, int x2, int y2, int z2) {
+
+        int cx = Math.abs(x2 - x1) + 1;
+        int cy = Math.abs(y2 - y1) + 1;
+        int cz = Math.abs(z2 - z1) + 1;
+
+        return cx * cy * cz;
+    }
 }
