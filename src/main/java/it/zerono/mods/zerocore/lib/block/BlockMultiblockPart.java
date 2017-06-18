@@ -70,13 +70,16 @@ public class BlockMultiblockPart<PartType extends Enum<PartType> & IPropertyValu
         return this != sideState.getBlock();
     }
 
+    /**
+     * Called when the block is right clicked by a player.
+     */
     @Override
     public boolean onBlockActivated(World world, BlockPos position, IBlockState state, EntityPlayer player,
-                                    EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side,
-                                    float hitX, float hitY, float hitZ) {
+                                    EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 
         if (this.hasTileEntity(state) && !player.isSneaking()) {
 
+            final ItemStack heldItem = player.getHeldItem(hand);
             final TileEntity te = WorldHelper.getTile(world, position);
 
             // If the player's hands are empty and they rightclick on a multiblock, they get a
@@ -108,7 +111,7 @@ public class BlockMultiblockPart<PartType extends Enum<PartType> & IPropertyValu
             }
         }
 
-        return super.onBlockActivated(world, position, state, player, hand, heldItem, side, hitX, hitY, hitZ);
+        return super.onBlockActivated(world, position, state, player, hand, side, hitX, hitY, hitZ);
     }
 
     @Nonnull
