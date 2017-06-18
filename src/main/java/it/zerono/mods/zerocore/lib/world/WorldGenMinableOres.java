@@ -6,8 +6,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 
 import javax.annotation.Nullable;
@@ -92,6 +92,11 @@ public class WorldGenMinableOres extends ModWorldGeneratorBase {
                     return null != input &&
                             input.getBlock() == this._targetBlock &&
                             input.getBlock().getMetaFromState(input) == this._targetBlock.getMetaFromState(input);
+                }
+
+                @Override
+                public boolean test(@Nullable IBlockState input) {
+                    return this.apply(input);
                 }
 
                 private final Block _targetBlock = blockToReplace.getBlock();

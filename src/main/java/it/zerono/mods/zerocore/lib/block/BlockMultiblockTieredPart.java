@@ -124,13 +124,12 @@ public class BlockMultiblockTieredPart<Tier extends Enum<Tier> & IPropertyValue,
     /**
      * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
      *
-     * @param item
      * @param tab
      * @param list
      */
     @SideOnly(Side.CLIENT)
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 
         if (null == this._subBlocks) {
 

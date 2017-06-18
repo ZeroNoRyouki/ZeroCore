@@ -9,6 +9,7 @@ import it.zerono.mods.zerocore.lib.world.WorldHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -30,6 +31,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,14 +60,20 @@ public class ItemDebugTool extends Item implements IGameObject {
 
     @Override
     public void registerRecipes() {
+        // TODO: waiting for Forge new recipies system
+        /*
         GameRegistry.addRecipe(new ItemStack(this, 1, 0), "IDI", "CGX", "IRI",
                 'I', Items.IRON_INGOT, 'D', Items.GLOWSTONE_DUST, 'C', Items.COMPARATOR, 'G', Blocks.GLASS,
                 'X', Items.COMPASS, 'R', Items.REDSTONE);
+                */
     }
 
+    /**
+     * allows items to add custom lines of information to the mouseover description
+     */
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
 
         tooltip.add(I18n.format("zerocore:debugTool.block.tooltip1"));
         tooltip.add("");

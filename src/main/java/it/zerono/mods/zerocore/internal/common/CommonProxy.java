@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.network.play.server.SPacketChat;
+import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -61,7 +62,7 @@ public class CommonProxy implements IModInitializationHandler {
     public void sendPlayerStatusMessage(@Nonnull final EntityPlayer player, @Nonnull final ITextComponent message) {
 
         if (player instanceof EntityPlayerMP)
-            ((EntityPlayerMP)player).connection.sendPacket(new SPacketChat(message, (byte)2));
+            ((EntityPlayerMP)player).connection.sendPacket(new SPacketChat(message, ChatType.GAME_INFO));
     }
 
     private static MultiblockEventHandler s_multiblockHandler = null;

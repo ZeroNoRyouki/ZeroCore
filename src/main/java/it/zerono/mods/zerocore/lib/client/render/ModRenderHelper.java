@@ -2,10 +2,10 @@ package it.zerono.mods.zerocore.lib.client.render;
 
 import it.zerono.mods.zerocore.lib.BlockFacings;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -57,7 +57,7 @@ public final class ModRenderHelper {
                                        final int color, final int brightness) {
 
         final Tessellator tessellator = Tessellator.getInstance();
-        final VertexBuffer buffer = tessellator.getBuffer();
+        final BufferBuilder buffer = tessellator.getBuffer();
 
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
         MINECRAFT.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
@@ -114,13 +114,13 @@ public final class ModRenderHelper {
 
     public static class TexturedQuadData {
 
-        public final VertexBuffer vertexes;
+        public final BufferBuilder vertexes;
         public int alpha;
         public int red;
         public int green;
         public int blue;
 
-        public TexturedQuadData(final VertexBuffer buffer) {
+        public TexturedQuadData(final BufferBuilder buffer) {
 
             this.vertexes = buffer;
             this.alpha = this.red = this.green = this.blue = 0xFF;
@@ -233,7 +233,7 @@ public final class ModRenderHelper {
 
     public static void createTexturedQuad2(final TexturedQuadData data) {
 
-        final VertexBuffer vertexes = data.vertexes;
+        final BufferBuilder vertexes = data.vertexes;
 
         if (null == vertexes)
             return;
