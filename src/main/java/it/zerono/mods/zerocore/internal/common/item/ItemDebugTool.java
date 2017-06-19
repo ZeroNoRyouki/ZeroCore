@@ -3,6 +3,7 @@ package it.zerono.mods.zerocore.internal.common.item;
 import it.zerono.mods.zerocore.lib.IDebugMessages;
 import it.zerono.mods.zerocore.lib.IDebuggable;
 import it.zerono.mods.zerocore.lib.IGameObject;
+import it.zerono.mods.zerocore.lib.crafting.RecipeHelper;
 import it.zerono.mods.zerocore.util.CodeHelper;
 import it.zerono.mods.zerocore.util.OreDictionaryHelper;
 import it.zerono.mods.zerocore.lib.world.WorldHelper;
@@ -58,11 +59,14 @@ public class ItemDebugTool extends Item implements IGameObject {
 
     @Override
     public void registerRecipes() {
-        GameRegistry.addRecipe(new ItemStack(this, 1, 0), "IDI", "CGX", "IRI",
+        RecipeHelper.addShapedRecipe(new ItemStack(this, 1, 0), "IDI", "CGX", "IRI",
                 'I', Items.IRON_INGOT, 'D', Items.GLOWSTONE_DUST, 'C', Items.COMPARATOR, 'G', Blocks.GLASS,
                 'X', Items.COMPASS, 'R', Items.REDSTONE);
     }
 
+    /**
+     * allows items to add custom lines of information to the mouseover description
+     */
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
