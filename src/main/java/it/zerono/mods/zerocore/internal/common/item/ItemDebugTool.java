@@ -3,6 +3,7 @@ package it.zerono.mods.zerocore.internal.common.item;
 import it.zerono.mods.zerocore.lib.IDebugMessages;
 import it.zerono.mods.zerocore.lib.IDebuggable;
 import it.zerono.mods.zerocore.lib.IGameObject;
+import it.zerono.mods.zerocore.lib.crafting.RecipeHelper;
 import it.zerono.mods.zerocore.util.CodeHelper;
 import it.zerono.mods.zerocore.util.OreDictionaryHelper;
 import it.zerono.mods.zerocore.lib.world.WorldHelper;
@@ -16,6 +17,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -60,12 +62,9 @@ public class ItemDebugTool extends Item implements IGameObject {
 
     @Override
     public void registerRecipes() {
-        // TODO: waiting for Forge new recipies system
-        /*
-        GameRegistry.addRecipe(new ItemStack(this, 1, 0), "IDI", "CGX", "IRI",
+        RecipeHelper.addShapedRecipe(new ItemStack(this, 1, 0), "IDI", "CGX", "IRI",
                 'I', Items.IRON_INGOT, 'D', Items.GLOWSTONE_DUST, 'C', Items.COMPARATOR, 'G', Blocks.GLASS,
                 'X', Items.COMPASS, 'R', Items.REDSTONE);
-                */
     }
 
     /**
