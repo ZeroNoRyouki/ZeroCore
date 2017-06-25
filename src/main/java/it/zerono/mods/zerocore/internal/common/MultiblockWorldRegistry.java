@@ -76,7 +76,7 @@ final class MultiblockWorldRegistry {
      */
     void tickStart() {
 
-        this.worldObj.theProfiler.startSection("Zero CORE|Multiblock|Tick");
+        this.worldObj.profiler.startSection("Zero CORE|Multiblock|Tick");
 
         if(controllers.size() > 0) {
             for(MultiblockControllerBase controller : controllers) {
@@ -94,7 +94,7 @@ final class MultiblockWorldRegistry {
             }
         }
 
-        this.worldObj.theProfiler.endSection();
+        this.worldObj.profiler.endSection();
     }
 
     /**
@@ -106,7 +106,7 @@ final class MultiblockWorldRegistry {
 
         // Merge pools - sets of adjacent machines which should be merged later on in processing
 
-        this.worldObj.theProfiler.startSection("Zero CORE|Multiblock|Merge");
+        this.worldObj.profiler.startSection("Zero CORE|Multiblock|Merge");
 
         List<Set<MultiblockControllerBase>> mergePools = null;
         if(orphanedParts.size() > 0) {
@@ -223,7 +223,7 @@ final class MultiblockWorldRegistry {
             }
         }
 
-        this.worldObj.theProfiler.endStartSection("Zero CORE|Multiblock|Split&Assembly");
+        this.worldObj.profiler.endStartSection("Zero CORE|Multiblock|Split&Assembly");
 
         // Process splits and assembly
         // Any controllers which have had parts removed must be checked to see if some parts are no longer
@@ -256,7 +256,7 @@ final class MultiblockWorldRegistry {
 
         // Unregister dead controllers
 
-        this.worldObj.theProfiler.endStartSection("Zero CORE|Multiblock|DeadControllers");
+        this.worldObj.profiler.endStartSection("Zero CORE|Multiblock|DeadControllers");
 
         if(deadControllers.size() > 0) {
             for(MultiblockControllerBase controller : deadControllers) {
@@ -276,7 +276,7 @@ final class MultiblockWorldRegistry {
 
         // Process detached blocks
 
-        this.worldObj.theProfiler.endStartSection("Zero CORE|Multiblock|DetachedParts");
+        this.worldObj.profiler.endStartSection("Zero CORE|Multiblock|DetachedParts");
 
         // Any blocks which have been detached this tick should be moved to the orphaned
         // list, and will be checked next tick to see if their chunk is still loaded.
@@ -288,7 +288,7 @@ final class MultiblockWorldRegistry {
         addAllOrphanedPartsThreadsafe(detachedParts);
         detachedParts.clear();
 
-        this.worldObj.theProfiler.endSection();
+        this.worldObj.profiler.endSection();
     }
 
     /**
@@ -303,7 +303,7 @@ final class MultiblockWorldRegistry {
 
         if(!this.worldObj.isBlockLoaded(worldLocation)) {
 
-            this.worldObj.theProfiler.startSection("Zero CORE|Multiblock|PartAdded");
+            this.worldObj.profiler.startSection("Zero CORE|Multiblock|PartAdded");
 
             // Part goes into the waiting-for-chunk-load list
             Set<IMultiblockPart> partSet;
@@ -321,7 +321,7 @@ final class MultiblockWorldRegistry {
                 partSet.add(part);
             }
 
-            this.worldObj.theProfiler.endSection();
+            this.worldObj.profiler.endSection();
         }
         else {
             // Part goes into the orphan queue, to be checked this tick
@@ -336,7 +336,7 @@ final class MultiblockWorldRegistry {
      */
     void onPartRemovedFromWorld(final IMultiblockPart part) {
 
-        this.worldObj.theProfiler.startSection("Zero CORE|Multiblock|PartRemoved");
+        this.worldObj.profiler.startSection("Zero CORE|Multiblock|PartRemoved");
 
         final BlockPos coord = part.getWorldPosition();
         if(coord != null) {
@@ -363,7 +363,7 @@ final class MultiblockWorldRegistry {
 
         part.assertDetached();
 
-        this.worldObj.theProfiler.endSection();
+        this.worldObj.profiler.endSection();
     }
 
     /**

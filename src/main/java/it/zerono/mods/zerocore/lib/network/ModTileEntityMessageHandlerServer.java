@@ -10,11 +10,11 @@ public abstract class ModTileEntityMessageHandlerServer<MessageT extends ModTile
 
     @Override
     protected IThreadListener getThreadListener(MessageContext ctx) {
-        return (WorldServer)ctx.getServerHandler().playerEntity.getEntityWorld();
+        return (WorldServer)ctx.getServerHandler().player.getEntityWorld();
     }
 
     @Override
     protected World getWorld(MessageContext ctx) {
-        return ctx.getServerHandler().playerEntity.getEntityWorld();
+        return ctx.getServerHandler().player.getEntityWorld();
     }
 }

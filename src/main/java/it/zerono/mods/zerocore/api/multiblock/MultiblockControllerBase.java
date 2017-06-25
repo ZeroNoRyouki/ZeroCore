@@ -546,7 +546,7 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 					for(int z = minChunkZ; z <= maxChunkZ; z++) {
 						// Ensure that we save our data, even if the our save delegate is in has no TEs.
 						Chunk chunkToSave = this.WORLD.getChunkFromChunkCoords(x, z);
-						chunkToSave.setChunkModified();
+						chunkToSave.markDirty();
 					}
 				}
 			}

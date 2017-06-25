@@ -1,43 +1,153 @@
 package it.zerono.mods.zerocore.lib.crafting;
 
-/*******************************************************************************
- * Copyright 2014-2017, the Biomes O' Plenty Team
- *
- * This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International Public License.
- *
- * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/.
- *
- * Original: https://github.com/Glitchfiend/BiomesOPlenty/blob/0f8be0526e01d918cf8f22d4904a3b74981dee6f/src/main/java/biomesoplenty/common/util/inventory/CraftingUtil.java
- * (edited to work with multiple mods)
- ******************************************************************************/
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreIngredient;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public final class RecipeHelper {
 
+    // Shaped recipe
+
+    public static void addShapedRecipe(@Nonnull final ItemStack output, @Nonnull final Object... inputs) {
+        addShapedRecipe(null, output, inputs);
+    }
+
+    public static void addShapedRecipe(@Nullable final ResourceLocation group,
+                                       @Nonnull final ItemStack output, @Nonnull final Object... inputs) {
+
+        final ResourceLocation name = output.getItem().getRegistryName();
+
+        if (null == name)
+            throw new IllegalArgumentException("Invalid output item registry name");
+
+        addShapedRecipe(name, group, output, inputs);
+    }
+
+    public static void addShapedRecipe(@Nonnull final ResourceLocation name, @Nullable final ResourceLocation group,
+                                       @Nonnull final ItemStack output, @Nonnull final Object... inputs) {
+
+        final CraftingHelper.ShapedPrimer primer = CraftingHelper.parseShaped(inputs);
+
+        ForgeRegistries.RECIPES.register(new ShapedRecipes(groupName(group), primer.width, primer.height,
+                primer.input, output).setRegistryName(name));
+    }
+
+    // Shapeless recipe
+
+    public static void addShapelessRecipe(@Nonnull final ItemStack output, @Nonnull final Object... inputs) {
+        addShapelessRecipe(null, output, inputs);
+    }
+
+    public static void addShapelessRecipe(@Nullable final ResourceLocation group,
+                                          @Nonnull final ItemStack output, @Nonnull final Object... inputs) {
+
+        final ResourceLocation name = output.getItem().getRegistryName();
+
+        if (null == name)
+            throw new IllegalArgumentException("Invalid output item registry name");
+
+        addShapelessRecipe(name, group, output, inputs);
+    }
+
+    public static void addShapelessRecipe(@Nonnull final ResourceLocation name, @Nullable final ResourceLocation group,
+                                          @Nonnull final ItemStack output, @Nonnull final Object... inputs) {
+
+        final NonNullList<Ingredient> ingredients = NonNullList.create();
+
+        for (Object input : inputs)
+            ingredients.add(asIngredient(input));
+
+        ForgeRegistries.RECIPES.register(new ShapelessRecipes(groupName(group), output, ingredients).setRegistryName(name));
+    }
+
+    // Shaped Ore-Dict recipe
+
+    public static void addShapedOreDictRecipe(@Nonnull final ItemStack output, @Nonnull final Object... inputs) {
+        addShapedOreDictRecipe(null, output, inputs);
+    }
+
+    public static void addShapedOreDictRecipe(@Nullable final ResourceLocation group,
+                                              @Nonnull final ItemStack output, @Nonnull final Object... inputs) {
+
+        final ResourceLocation name = output.getItem().getRegistryName();
+
+        if (null == name)
+            throw new IllegalArgumentException("Invalid output item registry name");
+
+        addShapedOreDictRecipe(name, group, output, inputs);
+    }
+
+    public static void addShapedOreDictRecipe(@Nonnull final ResourceLocation name, @Nullable final ResourceLocation group,
+                                              @Nonnull final ItemStack output, @Nonnull final Object... inputs) {
+
+        final CraftingHelper.ShapedPrimer primer = CraftingHelper.parseShaped(inputs);
+
+        ForgeRegistries.RECIPES.register(new ShapedOreRecipe(groupResourceLocation(group), output, primer).setRegistryName(name));
+    }
+
+    // Shapeless Ore-Dict recipe
+
+    public static void addShapelessOreDictRecipe(@Nonnull final ItemStack output, @Nonnull final Object... inputs) {
+        addShapelessOreDictRecipe(null, output, inputs);
+    }
+
+    public static void addShapelessOreDictRecipe(@Nullable final ResourceLocation group,
+                                              @Nonnull final ItemStack output, @Nonnull final Object... inputs) {
+
+        final ResourceLocation name = output.getItem().getRegistryName();
+
+        if (null == name)
+            throw new IllegalArgumentException("Invalid output item registry name");
+
+        addShapelessOreDictRecipe(name, group, output, inputs);
+    }
+
+    public static void addShapelessOreDictRecipe(@Nonnull final ResourceLocation name, @Nullable final ResourceLocation group,
+                                                 @Nonnull final ItemStack output, @Nonnull final Object... inputs) {
+        ForgeRegistries.RECIPES.register(new ShapelessOreRecipe(groupResourceLocation(group), output, inputs).setRegistryName(name));
+    }
+
+    @Nonnull
+    private static String groupName(@Nullable final ResourceLocation group) {
+        return null == group ? "" : group.toString();
+    }
+
+    @Nonnull
+    private static ResourceLocation groupResourceLocation(@Nullable final ResourceLocation group) {
+        return null == group ? new ResourceLocation("") : group;
+    }
+
+    private static Ingredient asIngredient(Object object) {
+
+        if (object instanceof Item)
+            return Ingredient.fromItems((Item)object);
+
+        else if (object instanceof Block)
+            return Ingredient.fromStacks(new ItemStack((Block)object));
+
+        else if (object instanceof ItemStack)
+            return Ingredient.fromStacks((ItemStack)object);
+
+        else if (object instanceof String)
+            return new OreIngredient((String) object);
+
+        throw new IllegalArgumentException("Cannot convert object of type " + object.getClass().toString() + " to an Ingredient!");
+    }
+
+    /*
     public static void addShapedOreDictRecipe(ItemStack output, Object... inputs) {
         addShapedRecipe(output, inputs);
     }
@@ -92,10 +202,15 @@ public final class RecipeHelper {
         int height = pattern.size();
 
         try {
-            key.put(" ", Ingredient.field_193370_a);
+            key.put(" ", Ingredient.EMPTY);
             Object ingredients = prepareMaterials(pattern.toArray(new String[pattern.size()]), key, width, height);
             ShapedRecipes recipe = new ShapedRecipes(outputGroup(namespace, output), width, height, (NonNullList<Ingredient>) ingredients, output);
             addRecipe(unusedLocForOutput(namespace, output), recipe);
+
+            ForgeRegistries.RECIPES.re
+
+            GameRegistry.addShapedRecipe(ResourceLocation name, ResourceLocation group, @Nonnull ItemStack output, Object... params)
+
         } catch(Throwable e) {
             throw new RuntimeException(e);
         }
@@ -103,7 +218,7 @@ public final class RecipeHelper {
 
     // copy from vanilla
     private static NonNullList<Ingredient> prepareMaterials(String[] p_192402_0_, Map<String, Ingredient> p_192402_1_, int p_192402_2_, int p_192402_3_) {
-        NonNullList<Ingredient> nonnulllist = NonNullList.<Ingredient>withSize(p_192402_2_ * p_192402_3_, Ingredient.field_193370_a);
+        NonNullList<Ingredient> nonnulllist = NonNullList.<Ingredient>withSize(p_192402_2_ * p_192402_3_, Ingredient.EMPTY);
         Set<String> set = Sets.newHashSet(p_192402_1_.keySet());
         set.remove(" ");
 
@@ -129,13 +244,13 @@ public final class RecipeHelper {
 
     private static Ingredient asIngredient(Object object) {
         if(object instanceof Item)
-            return Ingredient.func_193367_a((Item)object);
+            return Ingredient.fromItems((Item)object);
 
         else if(object instanceof Block)
-            return Ingredient.func_193369_a(new ItemStack((Block)object));
+            return Ingredient.fromStacks(new ItemStack((Block)object));
 
         else if(object instanceof ItemStack)
-            return Ingredient.func_193369_a((ItemStack)object);
+            return Ingredient.fromStacks((ItemStack)object);
 
         else if(object instanceof String)
             return new OreIngredient((String) object);
@@ -149,7 +264,7 @@ public final class RecipeHelper {
         int index = 0;
 
         // find unused recipe name
-        while (CraftingManager.field_193380_a.containsKey(recipeLoc)) {
+        while (CraftingManager.REGISTRY.containsKey(recipeLoc)) {
             index++;
             recipeLoc = new ResourceLocation(namespace, baseLoc.getResourcePath() + "_" + index);
         }
@@ -162,7 +277,7 @@ public final class RecipeHelper {
         if(item instanceof IRecipeGrouped)
             return namespace + ":" + ((IRecipeGrouped) item).getRecipeGroup();
         if(item instanceof ItemBlock) {
-            Block block = ((ItemBlock) item).block;
+            Block block = ((ItemBlock) item).getBlock();
             if(block instanceof IRecipeGrouped)
                 return namespace + ":" + ((IRecipeGrouped) block).getRecipeGroup();
         }
@@ -173,4 +288,5 @@ public final class RecipeHelper {
     private static String getNamespace() {
         return Loader.instance().activeModContainer().getModId();
     }
+    */
 }

@@ -15,6 +15,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import javax.annotation.Nonnull;
@@ -46,7 +47,7 @@ public class CommonProxy implements IModInitializationHandler {
     @Nonnull
     public <I extends Item & IGameObject> I registerGameObject(@Nonnull I item) {
 
-        GameRegistry.register(item);
+        ForgeRegistries.ITEMS.register(item);
         item.onPostRegister();
         return item;
     }
@@ -54,7 +55,7 @@ public class CommonProxy implements IModInitializationHandler {
     @Nonnull
     public <B extends Block & IGameObject> B registerGameObject(@Nonnull B block) {
 
-        GameRegistry.register(block);
+        ForgeRegistries.BLOCKS.register(block);
         block.onPostRegister();
         return block;
     }
