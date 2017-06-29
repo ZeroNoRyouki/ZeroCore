@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
@@ -107,11 +108,26 @@ public class GameObjectsHandler implements IModInitializationHandler {
     }
 
     @SubscribeEvent
-    public void onRegisterBlocks(RegistryEvent.Register<Block> event) {
+    private void onRegisterBlocks(RegistryEvent.Register<Block> event) {
 
+        final IForgeRegistry<Block> registry = event.getRegistry();
 
+        for (final Block block : this._blocks) {
+
+            registry.register(block);
+        }
     }
 
+    @SubscribeEvent
+    private void onRegisterItems(RegistryEvent.Register<Item> event) {
+
+        final IForgeRegistry<Item> registry = event.getRegistry();
+
+        for (final Item item : this._items) {
+
+            registry.register(item);
+        }
+    }
 
 
     private void addRemapEntry(@Nonnull final Block block) {
