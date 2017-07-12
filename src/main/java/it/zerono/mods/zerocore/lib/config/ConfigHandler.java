@@ -9,6 +9,7 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.config.IConfigElement;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -30,12 +31,38 @@ public abstract class ConfigHandler implements IModInitializationHandler, IConfi
 
     public ConfigHandler(final String fileName, final String directoryName, final String languageKeyPrefix) {
 
+        if (null == languageKeyPrefix || languageKeyPrefix.isEmpty())
+            this._languageKeyPrefix = "config." + CodeHelper.getModIdFromActiveModContainer() + ".";
+        else if (!languageKeyPrefix.endsWith("."))
+            this._languageKeyPrefix = languageKeyPrefix + ".";
+        else
+            this._languageKeyPrefix = languageKeyPrefix;
+
         this._configFileName = fileName;
         this._configDirectoryName = directoryName;
-        this._languageKeyPrefix = languageKeyPrefix;
         this._categories = new ArrayList<>();
         this._listeners = new ArrayList<>();
+
+        final File configDirectory = Loader.instance().getConfigDir();
+        final File directory = null != this._configDirectoryName ? new File(configDirectory, this._configDirectoryName) : configDirectory;
+
+        if (!directory.exists() && !directory.mkdir())
+            throw new RuntimeException(String.format("Unable to create config directory %s", directory.getName()));
+
+        this._configuration = new Configuration(new File(directory, this._configFileName));
+
+        this.loadConfigurationCategories();
         this.addListener(this);
+    }
+
+    public void sync() {
+
+        this.loadConfigurationValues();
+
+        if (this._configuration.hasChanged())
+            this._configuration.save();
+
+        this.notifyListeners();
     }
 
     public void addListener(IConfigListener listener) {
@@ -54,7 +81,7 @@ public abstract class ConfigHandler implements IModInitializationHandler, IConfi
 
     @Override
     public void onPreInit(FMLPreInitializationEvent event) {
-
+        /*
         MinecraftForge.EVENT_BUS.register(this);
         this._modId = CodeHelper.getModIdFromActiveModContainer();
 
@@ -79,6 +106,7 @@ public abstract class ConfigHandler implements IModInitializationHandler, IConfi
             this._configuration.save();
 
         this.notifyListeners();
+        */
     }
 
     @Override
@@ -247,11 +275,10 @@ public abstract class ConfigHandler implements IModInitializationHandler, IConfi
         return property.setLanguageKey(this._languageKeyPrefix + category.getName() + "." + property.getName());
     }
 
-    private String _modId;
-    private String _languageKeyPrefix;
+    private final String _languageKeyPrefix;
     private final String _configFileName;
     private final String _configDirectoryName;
     private final List<ConfigCategory> _categories;
     private final List<IConfigListener> _listeners;
-    private Configuration _configuration;
+    private final Configuration _configuration;
 }
