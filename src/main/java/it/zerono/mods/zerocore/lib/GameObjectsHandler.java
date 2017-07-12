@@ -1,14 +1,18 @@
 package it.zerono.mods.zerocore.lib;
 
+import com.google.common.collect.ImmutableList;
 import it.zerono.mods.zerocore.internal.ZeroCore;
 import it.zerono.mods.zerocore.lib.block.ModBlock;
+import it.zerono.mods.zerocore.lib.config.ConfigHandler;
 import it.zerono.mods.zerocore.lib.item.ModItem;
+import it.zerono.mods.zerocore.util.CodeHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -25,7 +29,10 @@ import java.util.Map;
 
 public class GameObjectsHandler implements IModInitializationHandler {
 
-    public GameObjectsHandler() {
+    public GameObjectsHandler(ConfigHandler... configs) {
+
+        this._modId = CodeHelper.getModIdFromActiveModContainer();
+        this._configHandlers = ImmutableList.copyOf(configs);
 
         this._blocks = NonNullList.create();
         this._items = NonNullList.create();
@@ -33,6 +40,8 @@ public class GameObjectsHandler implements IModInitializationHandler {
         //this._objects = new ArrayList<>();
         this._remapBlocks = new LowerCaseRemapper<>();
         this._remapItems = new LowerCaseRemapper<>();
+
+        this.syncConfigHandlers();
     }
 
     @Nonnull
@@ -90,9 +99,6 @@ public class GameObjectsHandler implements IModInitializationHandler {
 
     @Override
     public void onPostInit(FMLPostInitializationEvent event) {
-
-        this._objects.clear();
-        this._objects = null;
     }
 
     public void onMissinBlockMappings(RegistryEvent.MissingMappings<Block> event) {
@@ -129,6 +135,12 @@ public class GameObjectsHandler implements IModInitializationHandler {
         }
     }
 
+    @SubscribeEvent
+    public void onConfigChangedFromGUI(ConfigChangedEvent.OnConfigChangedEvent event) {
+
+        if (this._modId.equalsIgnoreCase(event.getModID()))
+            this.syncConfigHandlers();
+    }
 
     private void addRemapEntry(@Nonnull final Block block) {
 
@@ -143,6 +155,16 @@ public class GameObjectsHandler implements IModInitializationHandler {
     private void addRemapEntry(@Nonnull final Item item) {
         this._remapItems.add(item);
     }
+
+    private void syncConfigHandlers() {
+
+        for (final ConfigHandler handler : this._configHandlers)
+            handler.sync();
+    }
+
+
+
+
 
     private static class LowerCaseRemapper<T extends IForgeRegistryEntry<T>> {
 
@@ -187,6 +209,9 @@ public class GameObjectsHandler implements IModInitializationHandler {
 
         private Map<String, T> _map;
     }
+
+    private final String _modId;
+    private final ImmutableList<ConfigHandler> _configHandlers;
 
     private final NonNullList<Block> _blocks;
     private final NonNullList<Item> _items;

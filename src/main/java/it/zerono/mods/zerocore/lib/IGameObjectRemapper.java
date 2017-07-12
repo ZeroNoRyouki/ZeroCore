@@ -1,4 +1,4 @@
-package it.zerono.mods.zerocore;
+package it.zerono.mods.zerocore.lib;
 
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistryEntry;
