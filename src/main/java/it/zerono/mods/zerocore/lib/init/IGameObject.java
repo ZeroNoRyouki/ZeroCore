@@ -2,9 +2,9 @@ package it.zerono.mods.zerocore.lib.init;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraftforge.fml.common.registry.IForgeRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import javax.annotation.Nonnull;
 
@@ -23,9 +23,8 @@ public interface IGameObject {
 
     /**
      * Register all the recipes for this object
-     * @param registry the recipes registry
      */
-    void onRegisterRecipes(@Nonnull final IForgeRegistry<IRecipe> registry);
+    void onRegisterRecipes();
 
     /**
      * Register all the models for this object

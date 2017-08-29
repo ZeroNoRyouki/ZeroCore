@@ -2,8 +2,9 @@ package it.zerono.mods.zerocore.internal.common.item;
 
 import it.zerono.mods.zerocore.lib.IDebugMessages;
 import it.zerono.mods.zerocore.lib.IDebuggable;
-import it.zerono.mods.zerocore.lib.IGameObject;
+import it.zerono.mods.zerocore.lib.init.IGameObject;
 import it.zerono.mods.zerocore.lib.crafting.RecipeHelper;
+import it.zerono.mods.zerocore.lib.item.ModItem;
 import it.zerono.mods.zerocore.util.CodeHelper;
 import it.zerono.mods.zerocore.util.OreDictionaryHelper;
 import it.zerono.mods.zerocore.lib.world.WorldHelper;
@@ -14,7 +15,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
@@ -27,23 +27,22 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemDebugTool extends Item implements IGameObject {
+public class ItemDebugTool extends ModItem {
 
     public ItemDebugTool(String itemName) {
 
-        this.setRegistryName(itemName);
-        this.setUnlocalizedName(this.getRegistryName().toString());
+        super(itemName);
         this.setMaxStackSize(1);
         this.setCreativeTab(CreativeTabs.TOOLS);
     }
 
+    /*
     @Override
     public void onPostRegister() {
     }
@@ -62,6 +61,26 @@ public class ItemDebugTool extends Item implements IGameObject {
         RecipeHelper.addShapedRecipe(new ItemStack(this, 1, 0), "IDI", "CGX", "IRI",
                 'I', Items.IRON_INGOT, 'D', Items.GLOWSTONE_DUST, 'C', Items.COMPARATOR, 'G', Blocks.GLASS,
                 'X', Items.COMPASS, 'R', Items.REDSTONE);
+    }
+    */
+
+    /**
+     * Register all the recipes for this object
+     */
+    @Override
+    public void onRegisterRecipes() {
+        RecipeHelper.addShapedRecipe(new ItemStack(this, 1, 0), "IDI", "CGX", "IRI",
+                'I', Items.IRON_INGOT, 'D', Items.GLOWSTONE_DUST, 'C', Items.COMPARATOR, 'G', Blocks.GLASS,
+                'X', Items.COMPASS, 'R', Items.REDSTONE);
+    }
+
+    /**
+     * Register all the models for this object
+     */
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void onRegisterModels() {
+        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
     }
 
     /**

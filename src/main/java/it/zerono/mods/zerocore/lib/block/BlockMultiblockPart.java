@@ -4,7 +4,6 @@ import it.zerono.mods.zerocore.api.multiblock.IMultiblockPart;
 import it.zerono.mods.zerocore.api.multiblock.MultiblockControllerBase;
 import it.zerono.mods.zerocore.api.multiblock.MultiblockTileEntityBase;
 import it.zerono.mods.zerocore.api.multiblock.validation.ValidationError;
-import it.zerono.mods.zerocore.lib.block.properties.IPropertyValue;
 import it.zerono.mods.zerocore.lib.world.WorldHelper;
 import it.zerono.mods.zerocore.util.CodeHelper;
 import it.zerono.mods.zerocore.util.ItemHelper;
@@ -21,7 +20,6 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class BlockMultiblockPart<PartType extends Enum<PartType> & IMultiblockPartType> extends ModBlock {
 
