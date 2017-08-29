@@ -6,7 +6,6 @@ import it.zerono.mods.zerocore.lib.config.ConfigHandler;
 import it.zerono.mods.zerocore.util.CodeHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -15,14 +14,15 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.IForgeRegistry;
+import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -76,10 +76,9 @@ public abstract class GameObjectsHandler implements IModInitializationHandler {
 
     /**
      * Register all the recipes for the blocks and items of this mod
-     * Override in your subclass to register your recipes with the provided registry
-     * @param registry the recipes registry
+     * Override in your subclass to register your recipes
      */
-    protected void onRegisterRecipes(@Nonnull final IForgeRegistry<IRecipe> registry) {
+    protected void onRegisterRecipes() {
     }
 
     /*
@@ -175,22 +174,6 @@ public abstract class GameObjectsHandler implements IModInitializationHandler {
     }
 
     /**
-     * Handles Forge Register event for Recipes
-     * Raise the onRegisterRecipes event and gather all the newly registered items and then ask all the previously
-     * registered blocks to register their ItemBlocks. Next, Ore Dictionary entries are registered
-     * @param event
-     */
-    @SubscribeEvent
-    protected void onRegisterRecipes(RegistryEvent.Register<IRecipe> event) {
-
-        final IForgeRegistry<IRecipe> registry = event.getRegistry();
-
-        this.onRegisterRecipes(registry);
-        raiseRegisterRecipes(this._blocks.values(), registry);
-        raiseRegisterRecipes(this._items.values(), registry);
-    }
-
-    /**
      * Handles client-side models registration
      * @param event
      */
@@ -202,14 +185,22 @@ public abstract class GameObjectsHandler implements IModInitializationHandler {
         raiseRegisterModels(this._items.values());
     }
 
-    @SubscribeEvent
-    protected void onMissinBlockMappings(RegistryEvent.MissingMappings<Block> event) {
-        remapObjects(this._blocksMappers, event.getMappings());
-    }
+    @Mod.EventHandler
+    public void onMissinMappings(FMLMissingMappingsEvent event) {
 
-    @SubscribeEvent
-    protected void onMissingItemMapping(RegistryEvent.MissingMappings<Item> event) {
-        remapObjects(this._itemsMappers, event.getMappings());
+        for (final FMLMissingMappingsEvent.MissingMapping mapping : event.get()) {
+
+            switch (mapping.type) {
+
+                case ITEM:
+                    remapObjects(this._itemsMappers, mapping);
+                    break;
+
+                case BLOCK:
+                    remapObjects(this._blocksMappers, mapping);
+                    break;
+            }
+        }
     }
 
     @SubscribeEvent
@@ -230,7 +221,12 @@ public abstract class GameObjectsHandler implements IModInitializationHandler {
     @Override
     @Mod.EventHandler
     public void onInit(FMLInitializationEvent event) {
+
         this.notifyConfigListeners();
+
+        this.onRegisterRecipes();
+        raiseRegisterRecipes(this._blocks.values());
+        raiseRegisterRecipes(this._items.values());
     }
 
     @Override
@@ -255,11 +251,11 @@ public abstract class GameObjectsHandler implements IModInitializationHandler {
     }
 
     private static <T extends IForgeRegistryEntry<T>> void raiseRegisterRecipes(
-            @Nonnull final ImmutableCollection<T> objects, @Nonnull final IForgeRegistry<IRecipe> registry) {
+            @Nonnull final ImmutableCollection<T> objects) {
 
         for (T object : objects)
             if (object instanceof IGameObject)
-                ((IGameObject)object).onRegisterRecipes(registry);
+                ((IGameObject)object).onRegisterRecipes();
     }
 
     @SideOnly(Side.CLIENT)
@@ -273,16 +269,14 @@ public abstract class GameObjectsHandler implements IModInitializationHandler {
 
     private static <T extends IForgeRegistryEntry<T>> void remapObjects(
             @Nonnull final List<IGameObjectMapper<T>> mappers,
-            @Nonnull final ImmutableList<RegistryEvent.MissingMappings.Mapping<T>> mappings) {
+            @Nonnull final FMLMissingMappingsEvent.MissingMapping mapping) {
 
-        for (final RegistryEvent.MissingMappings.Mapping<T> mapping : mappings) {
-            for (final IGameObjectMapper<T> mapper : mappers) {
+        for (final IGameObjectMapper<T> mapper : mappers) {
 
-                mapper.remap(mapping);
+            mapper.remap(mapping);
 
-                if (RegistryEvent.MissingMappings.Action.DEFAULT != mapping.getAction())
-                    break;
-            }
+            if (FMLMissingMappingsEvent.Action.DEFAULT != mapping.getAction())
+                break;
         }
     }
 
@@ -414,15 +408,19 @@ public abstract class GameObjectsHandler implements IModInitializationHandler {
          * @param mapping the object to remap
          */
         @Override
-        public void remap(@Nonnull RegistryEvent.MissingMappings.Mapping<T> mapping) {
+        public void remap(@Nonnull FMLMissingMappingsEvent.MissingMapping mapping) {
 
-            final String candidateName = mapping.key.getResourcePath().toLowerCase();
+            final String candidateName = mapping.resourceLocation.getResourcePath().toLowerCase();
 
             if (this._map.containsKey(candidateName)) {
 
                 final T replacement = this._map.get(candidateName);
 
-                mapping.remap(replacement);
+                if (replacement instanceof Block)
+                    mapping.remap((Block)replacement);
+
+                else if (replacement instanceof Item)
+                    mapping.remap((Item)replacement);
             }
         }
 

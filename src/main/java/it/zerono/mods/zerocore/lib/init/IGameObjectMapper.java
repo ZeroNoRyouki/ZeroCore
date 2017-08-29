@@ -1,8 +1,8 @@
 package it.zerono.mods.zerocore.lib.init;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.registries.IForgeRegistryEntry;
+import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
+import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 
@@ -21,5 +21,5 @@ public interface IGameObjectMapper<T extends IForgeRegistryEntry<T>> {
      * of them remap the object
      * @param mapping the object to remap
      */
-    void remap(@Nonnull final RegistryEvent.MissingMappings.Mapping<T> mapping);
+    void remap(@Nonnull final FMLMissingMappingsEvent.MissingMapping mapping);
 }
