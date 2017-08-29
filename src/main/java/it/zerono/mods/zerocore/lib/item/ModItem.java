@@ -1,7 +1,9 @@
 package it.zerono.mods.zerocore.lib.item;
 
-import it.zerono.mods.zerocore.lib.IGameObject;
+import it.zerono.mods.zerocore.lib.init.IGameObject;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import javax.annotation.Nonnull;
 
@@ -12,7 +14,7 @@ public class ModItem extends Item implements IGameObject {
         this.setRegistryName(itemName);
         this.setUnlocalizedName(this.getRegistryName().toString());
     }
-
+    /*
     @Override
     public void onPostRegister() {
 
@@ -32,5 +34,37 @@ public class ModItem extends Item implements IGameObject {
     public void registerRecipes() {
 
     }
+    */
 
+    /**
+     * Register all the ItemBlocks associated to this object
+     *
+     * @param registry the Items registry
+     */
+    @Override
+    public void onRegisterItemBlocks(@Nonnull IForgeRegistry<Item> registry) {
+    }
+
+    /**
+     * Register any entry for this object the Ore Dictionary
+     */
+    @Override
+    public void onRegisterOreDictionaryEntries() {
+    }
+
+    /**
+     * Register all the recipes for this object
+     *
+     * @param registry the recipes registry
+     */
+    @Override
+    public void onRegisterRecipes(@Nonnull IForgeRegistry<IRecipe> registry) {
+    }
+
+    /**
+     * Register all the models for this object
+     */
+    @Override
+    public void onRegisterModels() {
+    }
 }

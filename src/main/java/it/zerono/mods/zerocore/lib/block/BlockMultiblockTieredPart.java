@@ -19,6 +19,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -52,18 +53,32 @@ public class BlockMultiblockTieredPart<Tier extends Enum<Tier> & IPropertyValue,
         return descriptor;
     }
 
-    @Override
+    /*@Override
     public void onPostRegister() {
         ForgeRegistries.ITEMS.register(new ItemMultiblockTieredPart<>(this).setRegistryName(this.getRegistryName()));
+    }*/
+
+    /**
+     * Register all the ItemBlocks associated to this object
+     *
+     * @param registry the Items registry
+     */
+    @Override
+    public void onRegisterItemBlocks(@Nonnull IForgeRegistry<Item> registry) {
+        registry.register(new ItemMultiblockTieredPart<>(this).setRegistryName(this.getRegistryName()));
     }
 
+    /**
+     * Register all the models for this object
+     */
     @Override
     @SideOnly(Side.CLIENT)
-    public void onPostClientRegister() {
+    //public void onPostClientRegister() {
+    public void onRegisterModels() {
 
-        Item item = Item.getItemFromBlock(this);
-        ResourceLocation location = this.getRegistryName();
-        IBlockState defaultState = this.getDefaultState();
+        final Item item = Item.getItemFromBlock(this);
+        final ResourceLocation location = this.getRegistryName();
+        final IBlockState defaultState = this.getDefaultState();
         StringBuilder sb = new StringBuilder(32);
         boolean first = true;
 

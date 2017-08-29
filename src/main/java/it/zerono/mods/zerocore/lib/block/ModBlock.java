@@ -1,20 +1,18 @@
 package it.zerono.mods.zerocore.lib.block;
 
-import it.zerono.mods.zerocore.lib.IGameObject;
+import it.zerono.mods.zerocore.lib.init.IGameObject;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.IForgeRegistry;
+
 import javax.annotation.Nonnull;
 
 public abstract class ModBlock extends Block implements IGameObject {
@@ -34,6 +32,7 @@ public abstract class ModBlock extends Block implements IGameObject {
         return new ItemStack(this, amount, meta);
     }
 
+    /*
     @Override
     public void onPostRegister() {
         ForgeRegistries.ITEMS.register(new ItemBlock(this).setRegistryName(this.getRegistryName()));
@@ -51,12 +50,48 @@ public abstract class ModBlock extends Block implements IGameObject {
     @Override
     public void registerRecipes() {
     }
+    */
+
+    /**
+     * Register all the ItemBlocks associated to this object
+     *
+     * @param registry the Items registry
+     */
+    @Override
+    public void onRegisterItemBlocks(@Nonnull IForgeRegistry<Item> registry) {
+        registry.register(new ItemBlock(this).setRegistryName(this.getRegistryName()));
+    }
+
+    /**
+     * Register any entry for this object the Ore Dictionary
+     */
+    @Override
+    public void onRegisterOreDictionaryEntries() {
+    }
+
+    /**
+     * Register all the recipes for this object
+     *
+     * @param registry the recipes registry
+     */
+    @Override
+    public void onRegisterRecipes(@Nonnull IForgeRegistry<IRecipe> registry) {
+    }
+
+    /**
+     * Register all the models for this object
+     */
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void onRegisterModels() {
+    }
 
     @Override
     public int getMetaFromState(IBlockState state) {
         return 0;
     }
 
+    /*
     public static <Tile> Tile getTileEntity(@Nonnull final IBlockAccess world, @Nonnull final BlockPos position) {
 
         final TileEntity te = world.getTileEntity(position);
@@ -64,7 +99,7 @@ public abstract class ModBlock extends Block implements IGameObject {
         final Tile tile = null != te ? (Tile)te : null;
 
         return tile;
-    }
+    }*/
 
     protected ModBlock(@Nonnull final String blockName, @Nonnull final Material material) {
 
