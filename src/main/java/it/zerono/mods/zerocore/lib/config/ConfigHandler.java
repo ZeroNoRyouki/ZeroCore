@@ -1,25 +1,18 @@
 package it.zerono.mods.zerocore.lib.config;
 
-import it.zerono.mods.zerocore.lib.IModInitializationHandler;
 import it.zerono.mods.zerocore.util.CodeHelper;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.config.IConfigElement;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ConfigHandler implements IModInitializationHandler, IConfigListener {
+public abstract class ConfigHandler implements /*IModInitializationHandler,*/ IConfigListener {
 
     public ConfigHandler(final String fileName) {
         this(fileName, null, null);
@@ -61,12 +54,16 @@ public abstract class ConfigHandler implements IModInitializationHandler, IConfi
 
         if (this._configuration.hasChanged())
             this._configuration.save();
-
-        this.notifyListeners();
     }
 
     public void addListener(IConfigListener listener) {
         this._listeners.add(listener);
+    }
+
+    public void notifyListeners() {
+
+        for (IConfigListener listener: this._listeners)
+            listener.onConfigChanged();
     }
 
     public List<IConfigElement> getConfigElements() {
@@ -78,10 +75,10 @@ public abstract class ConfigHandler implements IModInitializationHandler, IConfi
 
         return elements;
     }
-
+/*
     @Override
     public void onPreInit(FMLPreInitializationEvent event) {
-        /*
+        / *
         MinecraftForge.EVENT_BUS.register(this);
         this._modId = CodeHelper.getModIdFromActiveModContainer();
 
@@ -106,7 +103,7 @@ public abstract class ConfigHandler implements IModInitializationHandler, IConfi
             this._configuration.save();
 
         this.notifyListeners();
-        */
+        * /
     }
 
     @Override
@@ -115,8 +112,8 @@ public abstract class ConfigHandler implements IModInitializationHandler, IConfi
 
     @Override
     public void onPostInit(FMLPostInitializationEvent event) {
-    }
-
+    }*/
+/*
     @SubscribeEvent
     public void onConfigChangedFromGUI(ConfigChangedEvent.OnConfigChangedEvent event) {
 
@@ -129,7 +126,7 @@ public abstract class ConfigHandler implements IModInitializationHandler, IConfi
 
             this.notifyListeners();
         }
-    }
+    }*/
 
     @Override
     public String toString() {
@@ -259,12 +256,6 @@ public abstract class ConfigHandler implements IModInitializationHandler, IConfi
         String[] value = this.getProperty(propertyName, category, defaultValue, comment).getStringList();
 
         return null != value ? value : defaultValue;
-    }
-
-    protected void notifyListeners() {
-
-        for (IConfigListener listener: this._listeners)
-            listener.onConfigChanged();
     }
 
     private ConfigCategory config(ConfigCategory category) {
