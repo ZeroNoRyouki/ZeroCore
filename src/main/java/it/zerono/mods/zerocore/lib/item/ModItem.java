@@ -1,7 +1,9 @@
 package it.zerono.mods.zerocore.lib.item;
 
 import it.zerono.mods.zerocore.lib.init.IGameObject;
+import it.zerono.mods.zerocore.util.ItemHelper;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -14,27 +16,21 @@ public class ModItem extends Item implements IGameObject {
         this.setRegistryName(itemName);
         this.setUnlocalizedName(this.getRegistryName().toString());
     }
-    /*
-    @Override
-    public void onPostRegister() {
 
+    @Nonnull
+    public ItemStack createItemStack() {
+        return ItemHelper.stackFrom(this, 1, 0);
     }
 
-    @Override
-    public void onPostClientRegister() {
-
+    @Nonnull
+    public ItemStack createItemStack(int amount) {
+        return ItemHelper.stackFrom(this, amount, 0);
     }
 
-    @Override
-    public void registerOreDictionaryEntries() {
-
+    @Nonnull
+    public ItemStack createItemStack(int amount, int meta) {
+        return ItemHelper.stackFrom(this, amount, meta);
     }
-
-    @Override
-    public void registerRecipes() {
-
-    }
-    */
 
     /**
      * Register all the ItemBlocks associated to this object
@@ -66,5 +62,14 @@ public class ModItem extends Item implements IGameObject {
      */
     @Override
     public void onRegisterModels() {
+    }
+
+    /**
+     * Converts the given ItemStack damage value into a metadata value to be placed in the world when this Item is
+     * placed as a Block (mostly used with ItemBlocks).
+     */
+    @Override
+    public int getMetadata(int metadata) {
+        return metadata;
     }
 }
