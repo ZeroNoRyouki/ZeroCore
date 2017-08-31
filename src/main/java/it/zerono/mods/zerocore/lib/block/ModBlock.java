@@ -1,6 +1,7 @@
 package it.zerono.mods.zerocore.lib.block;
 
 import it.zerono.mods.zerocore.lib.init.IGameObject;
+import it.zerono.mods.zerocore.util.ItemHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
@@ -17,38 +18,18 @@ public abstract class ModBlock extends Block implements IGameObject {
 
     @Nonnull
     public ItemStack createItemStack() {
-        return this.createItemStack(1, 0);
+            return ItemHelper.stackFrom(this, 1, 0);
     }
 
     @Nonnull
     public ItemStack createItemStack(final int amount) {
-        return this.createItemStack(amount, 0);
+        return ItemHelper.stackFrom(this, amount, 0);
     }
 
     @Nonnull
     public ItemStack createItemStack(final int amount, final int meta) {
-        return new ItemStack(this, amount, meta);
+        return ItemHelper.stackFrom(this, amount, meta);
     }
-
-    /*
-    @Override
-    public void onPostRegister() {
-        GameRegistry.register(new ItemBlock(this).setRegistryName(this.getRegistryName()));
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void onPostClientRegister() {
-    }
-
-    @Override
-    public void registerOreDictionaryEntries() {
-    }
-
-    @Override
-    public void registerRecipes() {
-    }
-    */
 
     /**
      * Register all the ItemBlocks associated to this object
@@ -86,16 +67,6 @@ public abstract class ModBlock extends Block implements IGameObject {
     public int getMetaFromState(IBlockState state) {
         return 0;
     }
-
-    /*
-    public static <Tile> Tile getTileEntity(@Nonnull final IBlockAccess world, @Nonnull final BlockPos position) {
-
-        final TileEntity te = world.getTileEntity(position);
-        @SuppressWarnings("unchecked")
-        final Tile tile = null != te ? (Tile)te : null;
-
-        return tile;
-    }*/
 
     protected ModBlock(@Nonnull final String blockName, @Nonnull final Material material) {
 
