@@ -18,10 +18,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLLog;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -91,7 +88,7 @@ public abstract class MultiblockTileEntityBase extends ModTileEntity implements 
 		if(this.controller != null) {
 			BlockPos coord = this.getWorldPosition();
 
-			FMLLog.info("[assert] Part @ (%d, %d, %d) should be detached already, but detected that it was not. This is not a fatal error, and will be repaired, but is unusual.",
+            ZeroCore.getLogger().info("[assert] Part @ (%d, %d, %d) should be detached already, but detected that it was not. This is not a fatal error, and will be repaired, but is unusual.",
 					coord.getX(), coord.getY(), coord.getZ());
 			this.controller = null;
 		}

@@ -21,7 +21,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraftforge.fml.common.FMLLog;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -131,7 +130,7 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 		BlockPos coord = part.getWorldPosition();
 
 		if(!connectedParts.add(part))
-			FMLLog.warning("[%s] Controller %s is double-adding part %d @ %s. This is unusual. If you encounter odd behavior, please tear down the machine and rebuild it.",
+            ZeroCore.getLogger().warn("[%s] Controller %s is double-adding part %d @ %s. This is unusual. If you encounter odd behavior, please tear down the machine and rebuild it.",
 					(WORLD.isRemote ? "CLIENT" : "SERVER"), hashCode(), part.hashCode(), coord);
 
 		part.onAttached(this);
@@ -278,7 +277,7 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 		if(!connectedParts.remove(part)) {
 			BlockPos position = part.getWorldPosition();
 
-			FMLLog.warning("[%s] Double-removing part (%d) @ %d, %d, %d, this is unexpected and may cause problems. If you encounter anomalies, please tear down the reactor and rebuild it.",
+            ZeroCore.getLogger().warn("[%s] Double-removing part (%d) @ %d, %d, %d, this is unexpected and may cause problems. If you encounter anomalies, please tear down the reactor and rebuild it.",
 					this.WORLD.isRemote ? "CLIENT" : "SERVER", part.hashCode(), position.getX(), position.getY(), position.getZ());
 		}
 
@@ -735,7 +734,7 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 		else if(res > 0) { return false; }
 		else {
 			// Strip dead parts from both and retry
-			FMLLog.warning("[%s] Encountered two controllers with the same reference coordinate. Auditing connected parts and retrying.", this.WORLD.isRemote ? "CLIENT" : "SERVER");
+            ZeroCore.getLogger().warn("[%s] Encountered two controllers with the same reference coordinate. Auditing connected parts and retrying.", this.WORLD.isRemote ? "CLIENT" : "SERVER");
 			auditParts();
 			otherController.auditParts();
 			
@@ -743,8 +742,8 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 			if(res < 0) { return true; }
 			else if(res > 0) { return false; }
 			else {
-				FMLLog.severe("My Controller (%d): size (%d), parts: %s", hashCode(), this.connectedParts.size(), this.getPartsListString());
-				FMLLog.severe("Other Controller (%d): size (%d), coords: %s", otherController.hashCode(), otherController.connectedParts.size(), otherController.getPartsListString());
+                ZeroCore.getLogger().error("My Controller (%d): size (%d), parts: %s", hashCode(), this.connectedParts.size(), this.getPartsListString());
+                ZeroCore.getLogger().error("Other Controller (%d): size (%d), coords: %s", otherController.hashCode(), otherController.connectedParts.size(), otherController.getPartsListString());
 				throw new IllegalArgumentException("[" + (this.WORLD.isRemote ? "CLIENT" : "SERVER") + "] Two controllers with the same reference coord that somehow both have valid parts - this should never happen!");
 			}
 
@@ -793,7 +792,7 @@ public abstract class MultiblockControllerBase implements IMultiblockValidator {
 		}
 
 		connectedParts.removeAll(deadParts);
-		FMLLog.warning("[%s] Controller found %d dead parts during an audit, %d parts remain attached", this.WORLD.isRemote ? "CLIENT" : "SERVER", deadParts.size(), this.connectedParts.size());
+        ZeroCore.getLogger().warn("[%s] Controller found %d dead parts during an audit, %d parts remain attached", this.WORLD.isRemote ? "CLIENT" : "SERVER", deadParts.size(), this.connectedParts.size());
 	}
 
 	/**

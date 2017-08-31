@@ -12,13 +12,13 @@ package it.zerono.mods.zerocore.internal.common;
 
 import it.zerono.mods.zerocore.api.multiblock.IMultiblockPart;
 import it.zerono.mods.zerocore.api.multiblock.MultiblockControllerBase;
+import it.zerono.mods.zerocore.internal.ZeroCore;
 import it.zerono.mods.zerocore.lib.world.WorldHelper;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraftforge.fml.common.FMLLog;
 
 import java.util.*;
 
@@ -207,7 +207,7 @@ final class MultiblockWorldRegistry {
                 }
 
                 if(newMaster == null) {
-                    FMLLog.severe("Multiblock system checked a merge pool of size %d, found no master candidates. This should never happen.", mergePool.size());
+                    ZeroCore.getLogger().error("Multiblock system checked a merge pool of size %d, found no master candidates. This should never happen.", mergePool.size());
                 }
                 else {
                     // Merge all the other machines into the master machine, then unregister them
@@ -263,7 +263,7 @@ final class MultiblockWorldRegistry {
                 // Go through any controllers which have marked themselves as potentially dead.
                 // Validate that they are empty/dead, then unregister them.
                 if(!controller.isEmpty()) {
-                    FMLLog.severe("Found a non-empty controller. Forcing it to shed its blocks and die. This should never happen!");
+                    ZeroCore.getLogger().error("Found a non-empty controller. Forcing it to shed its blocks and die. This should never happen!");
                     detachedParts.addAll(controller.detachAllBlocks());
                 }
 
