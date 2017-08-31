@@ -1,9 +1,9 @@
 package it.zerono.mods.zerocore.lib.client;
 
+import it.zerono.mods.zerocore.internal.ZeroCore;
 import it.zerono.mods.zerocore.util.CodeHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -217,7 +217,7 @@ public final class VersionChecker {
 
             } else {
 
-                FMLLog.warning("Update check for mod %s failed : %s", this._modData.getName(), reply);
+                ZeroCore.getLogger().info("Update check for mod %s failed : %s", this._modData.getName(), reply);
             }
         }
 

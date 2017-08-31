@@ -1,13 +1,12 @@
 package it.zerono.mods.zerocore.api.multiblock.tier;
 
 import it.zerono.mods.zerocore.api.multiblock.MultiblockControllerBase;
+import it.zerono.mods.zerocore.internal.ZeroCore;
 import it.zerono.mods.zerocore.lib.block.properties.IPropertyValue;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLLog;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.EnumSet;
@@ -30,22 +29,22 @@ public abstract class MultiblockDescriptor<Tier extends Enum<Tier> & IPropertyVa
 
         } catch (NoSuchMethodException ex) {
 
-            FMLLog.severe("No suitable constructor the found in Multiblock Controller class %s", this._controllerClass.getName());
+            ZeroCore.getLogger().error("No suitable constructor the found in Multiblock Controller class %s", this._controllerClass.getName());
             throw new RuntimeException("Multiblock Controller creation failed", ex);
 
         } catch (InstantiationException ex) {
 
-            FMLLog.severe("Failed to instantiate the Multiblock Controller class %s", this._controllerClass.getName());
+            ZeroCore.getLogger().error("Failed to instantiate the Multiblock Controller class %s", this._controllerClass.getName());
             throw new RuntimeException("Multiblock Controller creation failed", ex);
 
         } catch (IllegalAccessException ex) {
 
-            FMLLog.severe("Unable to access the constructor of the Multiblock Controller class %s", this._controllerClass.getName());
+            ZeroCore.getLogger().error("Unable to access the constructor of the Multiblock Controller class %s", this._controllerClass.getName());
             throw new RuntimeException("Multiblock Controller creation failed", ex);
 
         } catch (InvocationTargetException ex) {
 
-            FMLLog.severe("Error caught while constructing the Multiblock Controller class %s", this._controllerClass.getName());
+            ZeroCore.getLogger().error("Error caught while constructing the Multiblock Controller class %s", this._controllerClass.getName());
             throw new RuntimeException("Multiblock Controller creation failed", ex);
         }
     }
