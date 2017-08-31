@@ -82,43 +82,6 @@ public abstract class GameObjectsHandler implements IModInitializationHandler {
     protected void onRegisterRecipes(@Nonnull final IForgeRegistry<IRecipe> registry) {
     }
 
-    /*
-    @Deprecated
-    @Nonnull
-    public <I extends Item & IGameObject> I registerItem(@Nonnull final String name, @Nonnull final I item) {
-
-        item.setRegistryName(name);
-        item.setUnlocalizedName(item.getRegistryName().toString());
-        this._items.add(item);
-
-        final I result = ZeroCore.getProxy().registerGameObject(item);
-
-        this.addRemapEntry(result);
-        return result;
-    }
-
-    @Deprecated
-    @Nonnull
-    public <B extends Block & IGameObject, I extends ItemBlock & IGameObject> B registerBlock(@Nonnull final String name,
-                                                                                              @Nonnull final B block,
-                                                                                              @Nonnull final I itemBlock) {
-
-        block.setRegistryName(name);
-        block.setUnlocalizedName(block.getRegistryName().toString());
-        this._blocks.add(block);
-
-        this.registerItem(name, itemBlock);
-
-
-
-
-        final B result = ZeroCore.getProxy().registerGameObject(block);
-
-        this.addRemapEntry(result);
-        return result;
-    }
-    */
-
     protected void addBlockRemapper(@Nonnull final IGameObjectMapper<Block> remapper) {
         this._blocksMappers.add(remapper);
     }
@@ -127,8 +90,8 @@ public abstract class GameObjectsHandler implements IModInitializationHandler {
         this._itemsMappers.add(remapper);
     }
 
-    protected void registerTileEntity(@Nonnull final Class<? extends TileEntity> tileEntityClass, @Nonnull final String prefix) {
-        GameRegistry.registerTileEntity(tileEntityClass, prefix + tileEntityClass.getSimpleName());
+    protected void registerTileEntity(@Nonnull final String namePrefix, @Nonnull final Class<? extends TileEntity> tileEntityClass) {
+        GameRegistry.registerTileEntity(tileEntityClass, namePrefix + tileEntityClass.getSimpleName());
     }
 
     /**

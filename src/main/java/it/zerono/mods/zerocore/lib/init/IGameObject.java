@@ -32,27 +32,4 @@ public interface IGameObject {
      */
     @SideOnly(Side.CLIENT)
     void onRegisterModels();
-
-
-
-    /**
-     * Called just after the object is registered in the GameRegistry
-     */
-    //void onPostRegister();
-
-    /**
-     * Called on the client side just after the object is registered in the GameRegistry and onPostRegister()
-     */
-    //@SideOnly(Side.CLIENT)
-    //void onPostClientRegister();
-
-    /**
-     * Register any entry for this object the Ore Dictionary
-     */
-    //void registerOreDictionaryEntries();
-
-    /**
-     * Register any recipe for this object
-     */
-    //void registerRecipes();
 }

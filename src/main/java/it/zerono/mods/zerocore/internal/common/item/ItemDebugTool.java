@@ -2,12 +2,11 @@ package it.zerono.mods.zerocore.internal.common.item;
 
 import it.zerono.mods.zerocore.lib.IDebugMessages;
 import it.zerono.mods.zerocore.lib.IDebuggable;
-import it.zerono.mods.zerocore.lib.init.IGameObject;
 import it.zerono.mods.zerocore.lib.crafting.RecipeHelper;
 import it.zerono.mods.zerocore.lib.item.ModItem;
+import it.zerono.mods.zerocore.lib.world.WorldHelper;
 import it.zerono.mods.zerocore.util.CodeHelper;
 import it.zerono.mods.zerocore.util.OreDictionaryHelper;
-import it.zerono.mods.zerocore.lib.world.WorldHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
@@ -46,28 +45,6 @@ public class ItemDebugTool extends ModItem {
         this.setMaxStackSize(1);
         this.setCreativeTab(CreativeTabs.TOOLS);
     }
-
-    /*
-    @Override
-    public void onPostRegister() {
-    }
-
-    @Override
-    public void onPostClientRegister() {
-        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
-    }
-
-    @Override
-    public void registerOreDictionaryEntries() {
-    }
-
-    @Override
-    public void registerRecipes() {
-        RecipeHelper.addShapedRecipe(new ItemStack(this, 1, 0), "IDI", "CGX", "IRI",
-                'I', Items.IRON_INGOT, 'D', Items.GLOWSTONE_DUST, 'C', Items.COMPARATOR, 'G', Blocks.GLASS,
-                'X', Items.COMPASS, 'R', Items.REDSTONE);
-    }
-    */
 
     /**
      * Register all the recipes for this object

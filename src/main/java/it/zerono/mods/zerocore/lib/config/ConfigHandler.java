@@ -75,58 +75,6 @@ public abstract class ConfigHandler implements /*IModInitializationHandler,*/ IC
 
         return elements;
     }
-/*
-    @Override
-    public void onPreInit(FMLPreInitializationEvent event) {
-        / *
-        MinecraftForge.EVENT_BUS.register(this);
-        this._modId = CodeHelper.getModIdFromActiveModContainer();
-
-        if (null == this._languageKeyPrefix)
-            this._languageKeyPrefix = "config." + this._modId + ".";
-
-        else if (!this._languageKeyPrefix.endsWith("."))
-            this._languageKeyPrefix += ".";
-
-
-        final File directory = null != this._configDirectoryName ?
-                new File(event.getModConfigurationDirectory(), this._configDirectoryName) : event.getModConfigurationDirectory();
-
-        if (!directory.exists() && !directory.mkdir())
-            throw new RuntimeException(String.format("Unable to create config directory %s", directory.getName()));
-
-        this._configuration = new Configuration(new File(directory, this._configFileName));
-        this.loadConfigurationCategories();
-        this.loadConfigurationValues();
-
-        if (this._configuration.hasChanged())
-            this._configuration.save();
-
-        this.notifyListeners();
-        * /
-    }
-
-    @Override
-    public void onInit(FMLInitializationEvent event) {
-    }
-
-    @Override
-    public void onPostInit(FMLPostInitializationEvent event) {
-    }*/
-/*
-    @SubscribeEvent
-    public void onConfigChangedFromGUI(ConfigChangedEvent.OnConfigChangedEvent event) {
-
-        if (this._modId.equalsIgnoreCase(event.getModID())) {
-
-            this.loadConfigurationValues();
-
-            if (this._configuration.hasChanged())
-                this._configuration.save();
-
-            this.notifyListeners();
-        }
-    }*/
 
     @Override
     public String toString() {

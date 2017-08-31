@@ -10,16 +10,6 @@ import javax.annotation.Nonnull;
 
 public class ClientProxy extends CommonProxy {
 
-    /*
-    @Override
-    public void onPreInit(FMLPreInitializationEvent event) {
-
-        super.onPreInit(event);
-
-        MinecraftForge.EVENT_BUS.register(VersionChecker.class);
-        //VersionChecker.scheduleCheck("http://ws.zerono.it/check.ashx");
-    }*/
-
     @Override
     public void sendPlayerStatusMessage(@Nonnull final EntityPlayer player, @Nonnull final ITextComponent message) {
 
