@@ -12,6 +12,46 @@ import javax.annotation.Nullable;
 public final class ItemHelper {
 
     /**
+     * Create a stack for the given item
+     *
+     * @param item the item
+     * @param amount the number of items to put into the stack
+     * @param meta the metadata associated with the stack
+     * @return the newly create stack
+     */
+    @Nonnull
+    public static ItemStack stackFrom(@Nonnull final Item item, final int amount, final int meta) {
+        return new ItemStack(item, amount, meta, null);
+    }
+
+    /**
+     * Create a stack for the given item
+     *
+     * @param item the item
+     * @param amount the number of items to put into the stack
+     * @param meta the metadata associated with the stack
+     * @param nbt the data to be associated with the stack
+     * @return the newly create stack
+     */
+    @Nonnull
+    public static ItemStack stackFrom(@Nonnull final Item item, final int amount, final int meta, @Nullable NBTTagCompound nbt) {
+        return new ItemStack(item, amount, meta, nbt);
+    }
+
+    /**
+     * Create a stack for the item associated to the given block
+     *
+     * @param block the block
+     * @param amount the number of items to put into the stack
+     * @param meta the metadata associated with the stack
+     * @return the newly create stack
+     */
+    @Nonnull
+    public static ItemStack stackFrom(@Nonnull final Block block, final int amount, final int meta) {
+        return new ItemStack(block, amount, meta);
+    }
+
+    /**
      * Create a stack for the item associated with the give block state
      *
      * @param state the source block state
@@ -19,7 +59,7 @@ public final class ItemHelper {
      * @return a newly create stack containing the specified amount of items or null if no item associated to the block state can be found
      */
     @Nullable
-    public static ItemStack stackFrom(@Nonnull IBlockState state, int amount) {
+    public static ItemStack stackFrom(@Nonnull final IBlockState state, final int amount) {
 
         final Block block = state.getBlock();
         final Item item = Item.getItemFromBlock(block);
@@ -34,7 +74,7 @@ public final class ItemHelper {
      * @return the newly create stack
      */
     @Nullable
-    public static ItemStack stackFrom(@Nonnull NBTTagCompound nbt) {
+    public static ItemStack stackFrom(@Nonnull final NBTTagCompound nbt) {
         return ItemStack.loadItemStackFromNBT(nbt);
     }
 
