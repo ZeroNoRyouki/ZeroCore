@@ -3,8 +3,8 @@ package it.zerono.mods.zerocore.internal.common;
 import it.zerono.mods.zerocore.api.multiblock.IMultiblockPart;
 import it.zerono.mods.zerocore.api.multiblock.IMultiblockRegistry;
 import it.zerono.mods.zerocore.api.multiblock.MultiblockControllerBase;
+import it.zerono.mods.zerocore.internal.ZeroCore;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLLog;
 
 import java.util.HashMap;
 
@@ -57,7 +57,7 @@ final class MultiblockRegistry implements IMultiblockRegistry {
         if (this._registries.containsKey(world))
             this._registries.get(world).addDeadController(controller);
         else
-            FMLLog.warning("Controller %d in world %s marked as dead, but that world is not tracked! Controller is being ignored.", controller.hashCode(), world);
+            ZeroCore.getLogger().info("Controller %d in world %s marked as dead, but that world is not tracked! Controller is being ignored.", controller.hashCode(), world);
     }
 
     /**
@@ -73,7 +73,7 @@ final class MultiblockRegistry implements IMultiblockRegistry {
             this._registries.get(world).addDirtyController(controller);
         else
             //throw new IllegalArgumentException("Adding a dirty controller to a world that has no registered controllers!");
-            FMLLog.severe("Adding a dirty controller to a world that has no registered controllers! [ID=%d]",
+            ZeroCore.getLogger().error("Adding a dirty controller to a world that has no registered controllers! [ID=%d]",
                     null != world ? world.provider.getDimension() : Integer.MIN_VALUE);
     }
 
