@@ -3,6 +3,7 @@ package it.zerono.mods.zerocore.lib.item;
 import it.zerono.mods.zerocore.lib.init.IGameObject;
 import it.zerono.mods.zerocore.util.ItemHelper;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.IForgeRegistry;
 
 import javax.annotation.Nonnull;
