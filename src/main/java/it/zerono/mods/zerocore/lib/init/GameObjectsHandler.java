@@ -126,8 +126,8 @@ public abstract class GameObjectsHandler implements IModInitializationHandler {
         this._itemsMappers.add(remapper);
     }
 
-    protected void registerTileEntity(@Nonnull final Class<? extends TileEntity> tileEntityClass, @Nonnull final String prefix) {
-        GameRegistry.registerTileEntity(tileEntityClass, prefix + tileEntityClass.getSimpleName());
+    protected void registerTileEntity(@Nonnull final String namePrefix, @Nonnull final Class<? extends TileEntity> tileEntityClass) {
+        GameRegistry.registerTileEntity(tileEntityClass, namePrefix + tileEntityClass.getSimpleName());
     }
 
     /**
