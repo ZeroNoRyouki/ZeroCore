@@ -8,6 +8,7 @@ import net.minecraft.launchwrapper.Launch;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
@@ -162,5 +163,35 @@ public final class CodeHelper {
         int cz = Math.abs(z2 - z1) + 1;
 
         return cx * cy * cz;
+    }
+
+    /**
+     * Pack color and alpha values in a single int
+     * @param red the red component
+     * @param green the green component
+     * @param blue the blue component
+     * @param alpha the alpha component
+     * @return the packed value
+     */
+    public static int argb(final float red, final float green, final float blue, final float alpha) {
+        return argb(MathHelper.floor(red * 255.0F), MathHelper.floor(green * 255.0F),
+                MathHelper.floor(blue * 255.0F), MathHelper.floor(alpha * 255.0F));
+    }
+
+    /**
+     * Pack color and alpha values in a single int
+     * @param red the red component
+     * @param green the green component
+     * @param blue the blue component
+     * @param alpha the alpha component
+     * @return the packed value
+     */
+    public static int argb(final int red, final int green, final int blue, final int alpha) {
+
+        int color = (alpha << 8) + red;
+
+        color = (color << 8) + green;
+        color = (color << 8) + blue;
+        return color;
     }
 }
