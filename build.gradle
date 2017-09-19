@@ -48,7 +48,17 @@ configurations {
     deployerJars
 }
 
+
+repositories {
+
+    maven {
+        name = "OpenComputers"
+        url = "http://maven.cil.li/"
+    }
+}
+
 dependencies {
+    deobfCompile group: "li.cil.oc", name: "OpenComputers", version: "${config.opencomputers_version}"
 }
 
 sourceSets {
