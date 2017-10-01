@@ -140,5 +140,5 @@ public final class LuaHelper {
     private LuaHelper() {
     }
 
-    private static final String MODID_OPENCOMPUTERS = "opencomputers";
+    private static final String MODID_OPENCOMPUTERS = "OpenComputers";
 }
