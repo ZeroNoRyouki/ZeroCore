@@ -186,18 +186,15 @@ public abstract class GameObjectsHandler implements IModInitializationHandler {
     }
 
     @Override
-    @Mod.EventHandler
     public void onPreInit(FMLPreInitializationEvent event) {
     }
 
     @Override
-    @Mod.EventHandler
     public void onInit(FMLInitializationEvent event) {
         this.notifyConfigListeners();
     }
 
     @Override
-    @Mod.EventHandler
     public void onPostInit(FMLPostInitializationEvent event) {
     }
 
