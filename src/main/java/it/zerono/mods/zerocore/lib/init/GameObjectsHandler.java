@@ -185,7 +185,6 @@ public abstract class GameObjectsHandler implements IModInitializationHandler {
         raiseRegisterModels(this._items.values());
     }
 
-    @Mod.EventHandler
     public void onMissinMappings(FMLMissingMappingsEvent event) {
 
         for (final FMLMissingMappingsEvent.MissingMapping mapping : event.get()) {
@@ -214,12 +213,10 @@ public abstract class GameObjectsHandler implements IModInitializationHandler {
     }
 
     @Override
-    @Mod.EventHandler
     public void onPreInit(FMLPreInitializationEvent event) {
     }
 
     @Override
-    @Mod.EventHandler
     public void onInit(FMLInitializationEvent event) {
 
         this.notifyConfigListeners();
@@ -230,7 +227,6 @@ public abstract class GameObjectsHandler implements IModInitializationHandler {
     }
 
     @Override
-    @Mod.EventHandler
     public void onPostInit(FMLPostInitializationEvent event) {
     }
 
