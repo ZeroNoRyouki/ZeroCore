@@ -1,9 +1,11 @@
 package it.zerono.mods.zerocore.util;
 
+import com.google.common.base.Preconditions;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
@@ -202,6 +204,37 @@ public final class ItemHelper {
     @Nullable
     public static ItemStack stackEmpty() {
         return null;
+    }
+
+    public static boolean stackHasData(@Nonnull ItemStack stack, @Nonnull String key) {
+
+        Preconditions.checkNotNull(stack, "'stack' must be non-null");
+        Preconditions.checkNotNull(key, "'key' must be non-null");
+        Preconditions.checkArgument(!key.isEmpty(), "'key' must not be empty");
+
+        final NBTTagCompound tag = stack.getTagCompound();
+
+        return null != tag && tag.hasKey(key);
+    }
+
+    @Nullable
+    public static NBTBase stackGetData(@Nonnull ItemStack stack, @Nonnull String key) {
+        return ItemHelper.stackHasData(stack, key) ? stack.getTagCompound().getTag(key) : null;
+    }
+
+    public static void stackSetData(@Nonnull ItemStack stack, @Nonnull String key, @Nonnull NBTBase value) {
+
+        Preconditions.checkNotNull(stack, "'stack' must be non-null");
+        Preconditions.checkNotNull(key, "'key' must be non-null");
+        Preconditions.checkArgument(!key.isEmpty(), "'key' must not be empty");
+        Preconditions.checkNotNull(value, "'value' must be non-null");
+
+        NBTTagCompound tag = stack.getTagCompound();
+
+        if (null == tag)
+            stack.setTagCompound(tag = new NBTTagCompound());
+
+        tag.setTag(key, value);
     }
 
     private ItemHelper() {
