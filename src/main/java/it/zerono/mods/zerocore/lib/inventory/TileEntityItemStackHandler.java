@@ -1,4 +1,4 @@
-package it.zerono.mods.zerocore.lib.item;
+package it.zerono.mods.zerocore.lib.inventory;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
