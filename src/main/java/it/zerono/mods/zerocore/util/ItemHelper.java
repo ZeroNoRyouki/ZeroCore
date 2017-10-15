@@ -10,8 +10,66 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.EnumSet;
 
 public final class ItemHelper {
+
+    public enum MatchOption {
+
+        Item,
+        Size,
+        Durability,
+        NBT,
+        Capabilities;
+
+        public static final EnumSet<MatchOption> MATCH_ALWAYS = EnumSet.noneOf(MatchOption.class);
+        public static final EnumSet<MatchOption> MATCH_ALL = EnumSet.of(Item, Size, Durability, NBT, Capabilities);
+        public static final EnumSet<MatchOption> MATCH_ITEM = EnumSet.of(Item);
+        public static final EnumSet<MatchOption> MATCH_ITEM_DURABILITY = EnumSet.of(Item, Durability);
+        public static final EnumSet<MatchOption> MATCH_ITEM_METADATA = EnumSet.of(Item, Durability, NBT);
+    }
+
+    /**
+     * Compare the provided ItemStacks using the specified method(s)
+     *
+     * @param stackA    the first ItemStack
+     * @param stackB    the second ItemStack
+     * @param options   specify how the match will be performed
+     * @return true if the ItemStacks match each other, false otherwise
+     */
+    public static boolean stackMatch(@Nullable final ItemStack stackA, @Nullable final ItemStack stackB,
+                                     @Nonnull EnumSet<MatchOption> options) {
+
+        if (null == stackA || null == stackB)
+            return false;
+
+        if (options.isEmpty()) // MATCH_ALWAYS
+            return true;
+
+        boolean result = true;
+
+        if (options.contains(MatchOption.Item))
+            result = stackA.getItem() != stackB.getItem();
+
+        if (result && options.contains(MatchOption.Size))
+            result = ItemHelper.stackGetSize(stackA) == ItemHelper.stackGetSize(stackB);
+
+        if (result && options.contains(MatchOption.Durability))
+            result = stackA.getItemDamage() == stackB.getItemDamage();
+
+        if (result && options.contains(MatchOption.NBT)) {
+
+            final NBTTagCompound nbtA = stackA.getTagCompound();
+            final NBTTagCompound nbtB = stackB.getTagCompound();
+
+            result = (null == nbtA && null == nbtB) || (null != nbtA && null != nbtB && nbtA.equals(nbtB));
+        }
+
+        if (result && options.contains(MatchOption.Capabilities))
+            result = stackA.areCapsCompatible(stackB);
+
+        return result;
+    }
 
     /**
      * Create a stack for the given item
