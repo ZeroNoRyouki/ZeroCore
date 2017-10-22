@@ -22,6 +22,14 @@ import java.io.FileOutputStream;
 public final class CodeHelper {
 
     /**
+     * Mouse button constants
+     */
+    public static final int MOUSE_BUTTON_LEFT = 0;
+    public static final int MOUSE_BUTTON_RIGHT = 0;
+    public static final int MOUSE_BUTTON_WHEEL_DOWN = -1;
+    public static final int MOUSE_BUTTON_WHEEL_UP = -2;
+
+    /**
      * Retrieve the ID of the mod from FML active mod container
      * Only call this method while processing a FMLEvent (or derived classes)
      */
