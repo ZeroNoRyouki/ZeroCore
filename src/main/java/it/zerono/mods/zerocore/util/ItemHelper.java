@@ -18,15 +18,15 @@ public final class ItemHelper {
 
         Item,
         Size,
-        Durability,
+        MetaData,
         NBT,
         Capabilities;
 
         public static final EnumSet<MatchOption> MATCH_ALWAYS = EnumSet.noneOf(MatchOption.class);
-        public static final EnumSet<MatchOption> MATCH_ALL = EnumSet.of(Item, Size, Durability, NBT, Capabilities);
+        public static final EnumSet<MatchOption> MATCH_ALL = EnumSet.of(Item, Size, MetaData, NBT, Capabilities);
         public static final EnumSet<MatchOption> MATCH_ITEM = EnumSet.of(Item);
-        public static final EnumSet<MatchOption> MATCH_ITEM_DURABILITY = EnumSet.of(Item, Durability);
-        public static final EnumSet<MatchOption> MATCH_ITEM_METADATA = EnumSet.of(Item, Durability, NBT);
+        public static final EnumSet<MatchOption> MATCH_ITEM_METADATA = EnumSet.of(Item, MetaData);
+        public static final EnumSet<MatchOption> MATCH_ITEM_METADATA_NBT = EnumSet.of(Item, MetaData, NBT);
     }
 
     /**
@@ -54,8 +54,8 @@ public final class ItemHelper {
         if (result && options.contains(MatchOption.Size))
             result = ItemHelper.stackGetSize(stackA) == ItemHelper.stackGetSize(stackB);
 
-        if (result && options.contains(MatchOption.Durability))
-            result = stackA.getItemDamage() == stackB.getItemDamage();
+        if (result && options.contains(MatchOption.MetaData))
+            result = stackA.getMetadata() == stackB.getMetadata();
 
         if (result && options.contains(MatchOption.NBT)) {
 
@@ -185,7 +185,18 @@ public final class ItemHelper {
      *         MC 1.11.2+ : true if the stack is not empty, false otherwise
      */
     public static boolean stackIsValid(@Nullable ItemStack stack) {
-        return null != stack && stack.stackSize > 0;
+        return ItemHelper.stackIsValid(stack, false);
+    }
+
+    /**
+     * Check if the give stack is a valid stack
+     *
+     * @param stack the stack to query
+     * @return MC 1.10.2  : true if the stack is not null and not empty, false otherwise
+     *         MC 1.11.2+ : true if the stack is not empty, false otherwise
+     */
+    public static boolean stackIsValid(@Nullable ItemStack stack, boolean ignoreStackSize) {
+        return null != stack && (ignoreStackSize || stack.stackSize > 0);
     }
 
     /**
