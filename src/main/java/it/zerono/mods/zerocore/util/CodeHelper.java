@@ -25,7 +25,8 @@ public final class CodeHelper {
      * Mouse button constants
      */
     public static final int MOUSE_BUTTON_LEFT = 0;
-    public static final int MOUSE_BUTTON_RIGHT = 0;
+    public static final int MOUSE_BUTTON_RIGHT = 1;
+    public static final int MOUSE_BUTTON_MIDDLE = 2;
     public static final int MOUSE_BUTTON_WHEEL_DOWN = -1;
     public static final int MOUSE_BUTTON_WHEEL_UP = -2;
 
@@ -173,6 +174,40 @@ public final class CodeHelper {
         return cx * cy * cz;
     }
 
+    public static int packBytes(final int byte0, final int byte1, final int byte2, final int byte3) {
+
+        int packed = (byte3 << 8) + byte2;
+
+        packed = (packed << 8) + byte1;
+        packed = (packed << 8) + byte0;
+        return packed;
+    }
+
+    public static int unpackByte(final int packed, final int index) {
+
+        if (index < 0 || index > 3)
+            throw new IllegalArgumentException("Index must be 0-3");
+
+        return (byte)((packed >> (index * 8)) & 255);
+        /*
+        switch (index) {
+
+            case 1:
+                return (byte)(packed & 255);
+
+            case 2:
+                return (byte)(packed >> 8 & 255);
+
+            case 3:
+                return (byte)(packed >> 16 & 255);
+
+            case 4:
+                return (byte)(packed >> 24 & 255);
+        }
+
+        return -1;*/
+    }
+
     /**
      * Pack color and alpha values in a single int
      * @param red the red component
@@ -196,10 +231,56 @@ public final class CodeHelper {
      */
     public static int argb(final int red, final int green, final int blue, final int alpha) {
 
+        //return CodeHelper.packBytes(blue, green, red, alpha);
+        /**/
         int color = (alpha << 8) + red;
 
         color = (color << 8) + green;
         color = (color << 8) + blue;
-        return color;
+        return color;/**/
+    }
+
+    /**
+     * Get the red component from a packed argb value
+     *
+     * @param argb  the packed argb value
+     * @return the red compoment
+     */
+    public static int argbRed(final int argb) {
+        return argb >> 16 & 255;
+        //return CodeHelper.unpackByte(argb, 2);
+    }
+
+    /**
+     * Get the green component from a packed argb value
+     *
+     * @param argb  the packed argb value
+     * @return the green compoment
+     */
+    public static int argbGreen(final int argb) {
+        return argb >> 8 & 255;
+        //return CodeHelper.unpackByte(argb, 1);
+    }
+
+    /**
+     * Get the blue component from a packed argb value
+     *
+     * @param argb  the packed argb value
+     * @return the blue compoment
+     */
+    public static int argbBlue(final int argb) {
+        return argb & 255;
+        //return CodeHelper.unpackByte(argb, 0);
+    }
+
+    /**
+     * Get the alpha component from a packed argb value
+     *
+     * @param argb  the packed argb value
+     * @return the alpha compoment
+     */
+    public static int argbAlpha(final int argb) {
+        return argb >> 24 & 255;
+        //return CodeHelper.unpackByte(argb, 3);
     }
 }
