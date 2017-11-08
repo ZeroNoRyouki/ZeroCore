@@ -17,8 +17,18 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nonnull;
+
 @SideOnly(Side.CLIENT)
 public final class ModRenderHelper {
+
+    public static void bindTexture(@Nonnull final ResourceLocation textureLocation) {
+        MINECRAFT.renderEngine.bindTexture(textureLocation);
+    }
+
+    public static void bindBlocksTexture() {
+        MINECRAFT.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+    }
 
     public static TextureAtlasSprite getTextureSprite(final ResourceLocation location) {
         return MINECRAFT.getTextureMapBlocks().getAtlasSprite(location.toString());
@@ -60,7 +70,7 @@ public final class ModRenderHelper {
         final VertexBuffer buffer = tessellator.getBuffer();
 
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-        MINECRAFT.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        ModRenderHelper.bindBlocksTexture();
 
         final TextureAtlasSprite still = ModRenderHelper.getTextureSprite(fluid.getStill());
         final TextureAtlasSprite flowing = ModRenderHelper.getTextureSprite(fluid.getFlowing());
