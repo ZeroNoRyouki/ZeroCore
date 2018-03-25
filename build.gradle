@@ -48,17 +48,22 @@ configurations {
     deployerJars
 }
 
-
 repositories {
 
     maven {
         name = "OpenComputers"
         url = "http://maven.cil.li/"
     }
+
+    maven {
+        name = "ComputerCraft"
+        url "http://cc.crzd.me/maven/"
+    }
 }
 
 dependencies {
     deobfCompile group: "li.cil.oc", name: "OpenComputers", version: "${config.opencomputers_version}"
+    compile group: "dan200.computercraft", name: "ComputerCraft", version: "${config.computercraft_version}"
 }
 
 sourceSets {
@@ -106,6 +111,17 @@ compileJava.doFirst {
             .replaceAll('acceptedMinecraftVersions = ""', 'acceptedMinecraftVersions = "' + config.minecraft_version + '"')
             .replaceAll('dependencies = "required-after:forge"', 'dependencies = "' + project.ext.dependencies + '"')
 
+    file.write(source, 'UTF-8')
+
+    // mod compat
+    file = new File(projectDir, 'build/sources/main/java/it/zerono/mods/zerocore/lib/compat/ModIDs.java')
+    source = file.getText('UTF-8')
+            .replaceAll('"ComputerCraft"', '"' + config.compat_mod_computercraft_id + '"')
+            .replaceAll('"OpenComputers"', '"' + config.compat_mod_opencomputers_id + '"')
+            .replaceAll('"Mekanism"', '"' + config.compat_mod_mekanism_id + '"')
+            .replaceAll('"thermalexpansion"', '"' + config.compat_mod_thermalexpansion_id + '"')
+            .replaceAll('"MineFactoryReloaded"', '"' + config.compat_mod_minefactoryreloaded_id + '"')
+            .replaceAll('"appliedenergistics2"', '"' + config.compat_mod_appliedenergistics2_id + '"')
     file.write(source, 'UTF-8')
 }
 
