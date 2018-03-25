@@ -193,18 +193,18 @@ public class Vector3d {
     @Nonnull
     public Vector3d ceil() {
 
-        this.X = MathHelper.ceil(this.X);
-        this.Y = MathHelper.ceil(this.Y);
-        this.Z = MathHelper.ceil(this.Z);
+        this.X = Math.ceil(this.X);
+        this.Y = Math.ceil(this.Y);
+        this.Z = Math.ceil(this.Z);
         return this;
     }
 
     @Nonnull
     public Vector3d floor() {
 
-        this.X = MathHelper.floor(this.X);
-        this.Y = MathHelper.floor(this.Y);
-        this.Z = MathHelper.floor(this.Z);
+        this.X = Math.floor(this.X);
+        this.Y = Math.floor(this.Y);
+        this.Z = Math.floor(this.Z);
         return this;
     }
 
