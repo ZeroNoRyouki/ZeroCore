@@ -7,9 +7,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IThreadListener;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 
@@ -43,6 +45,14 @@ public final class CodeHelper {
             throw new RuntimeException("Cannot retrieve the MOD ID from FML");
 
         return modId;
+    }
+
+    public static IThreadListener getClientThreadListener() {
+        return ZeroCore.getProxy().getClientThreadListener();
+    }
+
+    public static IThreadListener getServerThreadListener() {
+        return ZeroCore.getProxy().getServerThreadListener();
     }
 
     /**
@@ -283,4 +293,6 @@ public final class CodeHelper {
         return argb >> 24 & 255;
         //return CodeHelper.unpackByte(argb, 3);
     }
+
+
 }
