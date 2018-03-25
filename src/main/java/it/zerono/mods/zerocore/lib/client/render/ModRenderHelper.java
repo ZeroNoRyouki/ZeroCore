@@ -1,6 +1,10 @@
 package it.zerono.mods.zerocore.lib.client.render;
 
 import it.zerono.mods.zerocore.lib.BlockFacings;
+import it.zerono.mods.zerocore.lib.client.render.builder.CuboidBuilder;
+import it.zerono.mods.zerocore.lib.math.Colour;
+import it.zerono.mods.zerocore.lib.math.Cuboid;
+import it.zerono.mods.zerocore.lib.math.LightMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -27,21 +31,30 @@ public final class ModRenderHelper {
     }
 
     public static void bindBlocksTexture() {
-        MINECRAFT.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
     }
 
     public static TextureAtlasSprite getTextureSprite(final ResourceLocation location) {
         return MINECRAFT.getTextureMapBlocks().getAtlasSprite(location.toString());
     }
 
-    public static TextureAtlasSprite getFluidSprite(final Fluid fluid) {
+    public static TextureAtlasSprite getFluidStillSprite(final Fluid fluid) {
         return ModRenderHelper.getTextureSprite(fluid.getStill());
     }
 
-    public static TextureAtlasSprite getFluidSprite(final FluidStack fluid) {
+    public static TextureAtlasSprite getFluidStillSprite(final FluidStack fluid) {
         return ModRenderHelper.getTextureSprite(fluid.getFluid().getStill(fluid));
     }
 
+    public static TextureAtlasSprite getFluidFlowingSprite(final Fluid fluid) {
+        return ModRenderHelper.getTextureSprite(fluid.getFlowing());
+    }
+
+    public static TextureAtlasSprite getFluidFlowingSprite(final FluidStack fluid) {
+        return ModRenderHelper.getTextureSprite(fluid.getFluid().getFlowing(fluid));
+    }
+
+    @Deprecated
     public static void glSetColor(final int rgbColor) {
 
         final float r = (float)((rgbColor >> 16) & 0xFF) / 255;
@@ -51,6 +64,7 @@ public final class ModRenderHelper {
         GlStateManager.color(r, g, b);
     }
 
+    @Deprecated
     public static void glSetColor(final int rgbColor, final float alpha) {
 
         final float r = (float)((rgbColor >> 16) & 0xFF) / 255;
@@ -60,6 +74,63 @@ public final class ModRenderHelper {
         GlStateManager.color(r, g, b, alpha);
     }
 
+    public static void bufferFluidCube(@Nonnull final VertexBuffer vertexBuffer,
+                                       @Nonnull final Cuboid cuboid, @Nonnull final BlockFacings visibleFaces,
+                                       @Nonnull final Colour colour, @Nonnull final LightMap lightMap,
+                                       @Nonnull final Fluid fluid) {
+
+        final CuboidBuilder builder = CuboidBuilder.getDefaultBuilder();
+        final TextureAtlasSprite still = ModRenderHelper.getFluidStillSprite(fluid);
+        final TextureAtlasSprite flowing = ModRenderHelper.getFluidFlowingSprite(fluid);
+
+        builder.setCuboid(cuboid);
+        builder.setColour(colour);
+        builder.setLightMap(lightMap);
+        builder.setVisibleFaces(visibleFaces);
+
+        for (final EnumFacing facing : EnumFacing.Plane.HORIZONTAL) {
+
+            if (visibleFaces.isSet(facing)) {
+                builder.setTexture(facing, flowing);
+            }
+        }
+
+        for (final EnumFacing facing : EnumFacing.Plane.VERTICAL) {
+
+            if (visibleFaces.isSet(facing)) {
+                builder.setTexture(facing, still);
+            }
+        }
+
+        builder.build().uploadVertexData(vertexBuffer);
+    }
+
+    public static void paintFluidCube(@Nonnull final Cuboid cuboid, @Nonnull final BlockFacings visibleFaces,
+                                      @Nonnull final Colour colour, @Nonnull final LightMap lightMap,
+                                      @Nonnull final Fluid fluid) {
+
+        final VertexBuffer vertexBuffer = Tessellator.getInstance().getBuffer();
+
+        vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+        bufferFluidCube(vertexBuffer, cuboid, visibleFaces, colour, lightMap, fluid);
+
+        RenderHelper.disableStandardItemLighting();
+        Tessellator.getInstance().draw();
+        RenderHelper.enableStandardItemLighting();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    @Deprecated
     public static void renderFluidCube(final Fluid fluid, final BlockFacings facesToDraw,
                                        final double offsetX, final double offsetY, final double offsetZ,
                                        final double x1, final double y1, final double z1,
@@ -122,6 +193,7 @@ public final class ModRenderHelper {
         GlStateManager.popMatrix();
     }
 
+    @Deprecated
     public static class TexturedQuadData {
 
         public final VertexBuffer vertexes;
@@ -241,6 +313,7 @@ public final class ModRenderHelper {
     }
 
 
+    @Deprecated
     public static void createTexturedQuad2(final TexturedQuadData data) {
 
         final VertexBuffer vertexes = data.vertexes;
