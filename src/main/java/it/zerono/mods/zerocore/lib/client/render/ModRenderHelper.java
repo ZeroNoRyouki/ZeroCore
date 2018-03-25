@@ -74,7 +74,7 @@ public final class ModRenderHelper {
         GlStateManager.color(r, g, b, alpha);
     }
 
-    public static void bufferFluidCube(@Nonnull final BufferBuilder vertexBuffer,
+    public static void bufferFluidCube(@Nonnull final VertexBuffer vertexBuffer,
                                        @Nonnull final Cuboid cuboid, @Nonnull final BlockFacings visibleFaces,
                                        @Nonnull final Colour colour, @Nonnull final LightMap lightMap,
                                        @Nonnull final Fluid fluid) {
@@ -109,7 +109,7 @@ public final class ModRenderHelper {
                                       @Nonnull final Colour colour, @Nonnull final LightMap lightMap,
                                       @Nonnull final Fluid fluid) {
 
-        final BufferBuilder vertexBuffer = Tessellator.getInstance().getBuffer();
+        final VertexBuffer vertexBuffer = Tessellator.getInstance().getBuffer();
 
         vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
         bufferFluidCube(vertexBuffer, cuboid, visibleFaces, colour, lightMap, fluid);

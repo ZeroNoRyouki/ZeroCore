@@ -4,7 +4,7 @@ import it.zerono.mods.zerocore.lib.math.Colour;
 import it.zerono.mods.zerocore.lib.math.LightMap;
 import it.zerono.mods.zerocore.lib.math.UV;
 import it.zerono.mods.zerocore.lib.math.Vector3d;
-import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -50,7 +50,7 @@ public class Vertex implements IVertexSource {
     }
 
     @Override
-    public void uploadVertexData(@Nonnull BufferBuilder buffer) {
+    public void uploadVertexData(@Nonnull VertexBuffer buffer) {
 
         for (final VertexFormatElement element : buffer.getVertexFormat().getElements()) {
 

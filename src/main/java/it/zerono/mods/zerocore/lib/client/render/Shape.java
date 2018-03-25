@@ -2,7 +2,7 @@ package it.zerono.mods.zerocore.lib.client.render;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -34,7 +34,7 @@ public class Shape implements IVertexSource {
     }
 
     @Override
-    public void uploadVertexData(@Nonnull final BufferBuilder buffer) {
+    public void uploadVertexData(@Nonnull final VertexBuffer buffer) {
 
         for (final Vertex vertex : this._vertices) {
             vertex.uploadVertexData(buffer);
