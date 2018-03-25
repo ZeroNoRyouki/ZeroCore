@@ -4,7 +4,9 @@ import it.zerono.mods.zerocore.internal.common.CommonProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.IThreadListener;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import javax.annotation.Nonnull;
 
@@ -15,5 +17,15 @@ public class ClientProxy extends CommonProxy {
 
         if (player instanceof EntityPlayerSP)
             Minecraft.getMinecraft().ingameGUI.setRecordPlayingMessage(message.getUnformattedText());
+    }
+
+    @Override
+    public IThreadListener getClientThreadListener() {
+        return Minecraft.getMinecraft();
+    }
+
+    @Override
+    public IThreadListener getServerThreadListener() {
+        return Minecraft.getMinecraft().getIntegratedServer();
     }
 }
