@@ -23,7 +23,7 @@ version = "${config.mod_version_major}.${config.mod_version_api}.${config.mod_ve
 group = "${config.group_id}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "zerocore-${config.minecraft_version}"
 
-ext.dependencies = "required-after:forge@[${config.forge_version_minDep},${config.forge_version_maxDep}); after:cofhcore"
+ext.dependencies = "required-after:forge@[${config.forge_version_minDep},${config.forge_version_maxDep});after:cofhcore;after:computercraft;after:opencomputers@[${config.opencomputers_version_dep},)"
 ext.fullVersion = project.config.minecraft_version + '-' + project.version
 
 minecraft {
