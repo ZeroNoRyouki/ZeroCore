@@ -41,7 +41,7 @@ public abstract class ComputerPeripheral {
 
     // Required Args: string (method name)
     public static Object[] help(@Nonnull final MultiblockComputerPeripheral peripheral, @Nonnull final Object[] arguments) throws Exception {
-        return new Object[] { "NOT IMPLEMENTED YET !" };
+        return new Object[] { "The help() method is not implemented yet" };
     }
 
     // Required Args: string (method name)
@@ -97,7 +97,7 @@ public abstract class ComputerPeripheral {
         final List<ComputerMethod> methods = Lists.newArrayList();
 
         // put in standard methods
-        //methods.add(new ComputerMethod<>("help", ComputerPeripheral::help));
+        methods.add(new ComputerMethod<>("help", ComputerPeripheral::help));
         methods.add(new ComputerMethod<>("isMethodAvailable", ComputerPeripheral::isMethodAvailable));
 
         // ask the peripheral to add it's own methods
