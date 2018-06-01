@@ -1,5 +1,7 @@
 package it.zerono.mods.zerocore.lib.compat.computer;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import it.zerono.mods.zerocore.lib.block.ModTileEntity;
 import it.zerono.mods.zerocore.lib.compat.ModIDs;
 import li.cil.oc.api.API;
@@ -13,6 +15,8 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.fml.common.Optional;
 
 import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.Map;
 
 @Optional.InterfaceList({
         @Optional.Interface(iface = "li.cil.oc.api.network.ManagedPeripheral", modid = ModIDs.MODID_OPENCOMPUTERS),
@@ -109,7 +113,23 @@ public class ConnectorOpenComputers extends Connector implements ManagedPeripher
 
         try {
 
-            return method.invoke(this.getPeripheral(), arguments.toArray());
+            final Object[] argsCopy = new Object[arguments.count()];
+            int idx = 0;
+
+            for (final Object arg: arguments) {
+
+                if (arg instanceof Map) {
+                    argsCopy[idx] = ImmutableMap.copyOf((Map)arg); //Maps.newHashMap((Map)arg);
+                } else if (arg instanceof List) {
+                    argsCopy[idx] = ImmutableList.copyOf((List)arg); // Lists.newArrayList((List)arg);
+                } else {
+                    argsCopy[idx] = arg;
+                }
+
+                ++idx;
+            }
+
+            return method.invoke(this.getPeripheral(), argsCopy);
 
         } catch (Exception ex) {
 
