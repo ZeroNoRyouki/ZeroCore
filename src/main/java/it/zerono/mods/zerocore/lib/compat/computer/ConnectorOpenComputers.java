@@ -114,7 +114,7 @@ public class ConnectorOpenComputers extends Connector implements ManagedPeripher
         try {
 
             final Object[] argsCopy = new Object[arguments.count()];
-            int idx = 0;
+            /*int idx = 0;
 
             for (final Object arg: arguments) {
 
@@ -127,7 +127,23 @@ public class ConnectorOpenComputers extends Connector implements ManagedPeripher
                 }
 
                 ++idx;
+            }*/
+
+            for (int idx = 0; idx < arguments.count(); ++idx) {
+
+                Object arg = arguments.checkAny(idx);
+
+                if (arg instanceof Map) {
+                    argsCopy[idx] = ImmutableMap.copyOf((Map)arg); //Maps.newHashMap((Map)arg);
+                } else if (arg instanceof List) {
+                    argsCopy[idx] = ImmutableList.copyOf((List)arg); // Lists.newArrayList((List)arg);
+                } else {
+                    argsCopy[idx] = arg;
+                }
+
+                ++idx;
             }
+
 
             return method.invoke(this.getPeripheral(), argsCopy);
 
