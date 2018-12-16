@@ -42,17 +42,11 @@ public class ComputerMethod<Peripheral extends ComputerPeripheral> {
 
             final IComputerMethodHandler<Peripheral> handler = this._handler;
 
-            CodeHelper.getServerThreadListener().addScheduledTask(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-
-                        handler.execute(peripheral, arguments);
-
-                    } catch (Exception ex) {
-
-                        ZeroCore.getLogger().error("Exception raised while running computer method on server thread", ex);
-                    }
+            CodeHelper.getServerThreadListener().addScheduledTask(() -> {
+                try {
+                    handler.execute(peripheral, arguments);
+                } catch (Exception ex) {
+                    ZeroCore.getLogger().error("Exception raised while running computer method on server thread", ex);
                 }
             });
 
