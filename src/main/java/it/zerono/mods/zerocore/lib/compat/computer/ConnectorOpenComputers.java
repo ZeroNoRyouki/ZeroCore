@@ -140,8 +140,6 @@ public class ConnectorOpenComputers extends Connector implements ManagedPeripher
                 } else {
                     argsCopy[idx] = arg;
                 }
-
-                ++idx;
             }
 
 
