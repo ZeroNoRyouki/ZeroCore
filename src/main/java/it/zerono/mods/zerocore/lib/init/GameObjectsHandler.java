@@ -94,6 +94,16 @@ public abstract class GameObjectsHandler implements IModInitializationHandler {
         GameRegistry.registerTileEntity(tileEntityClass, namePrefix + tileEntityClass.getSimpleName());
     }
 
+    @Nullable
+    protected Block getTrackedBlock(@Nonnull final String name) {
+        return this._blocks.get(name);
+    }
+
+    @Nullable
+    protected Item getTrackedItem(@Nonnull final String name) {
+        return this._items.get(name);
+    }
+
     /**
      * Handles Forge Register event for Blocks
      * Raise the onRegisterBlocks and onRegisterTileEntities events and gather all the newly registered blocks
