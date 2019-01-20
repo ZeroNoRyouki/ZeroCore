@@ -2,19 +2,24 @@ package it.zerono.mods.zerocore.lib.block;
 
 import it.zerono.mods.zerocore.lib.init.IGameObject;
 import it.zerono.mods.zerocore.util.ItemHelper;
+import joptsimple.internal.Strings;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public abstract class ModBlock extends Block implements IGameObject {
 
@@ -33,6 +38,11 @@ public abstract class ModBlock extends Block implements IGameObject {
         return ItemHelper.stackFrom(this, amount, meta);
     }
 
+    @Nullable
+    public String getOreDictionaryName() {
+        return this._oreDictionaryName;
+    }
+
     /**
      * Register all the ItemBlocks associated to this object
      *
@@ -48,6 +58,12 @@ public abstract class ModBlock extends Block implements IGameObject {
      */
     @Override
     public void onRegisterOreDictionaryEntries() {
+
+        final String name = this.getOreDictionaryName();
+
+        if (!Strings.isNullOrEmpty(name)) {
+            OreDictionary.registerOre(name, this);
+        }
     }
 
     /**
@@ -65,6 +81,7 @@ public abstract class ModBlock extends Block implements IGameObject {
     @Override
     @SideOnly(Side.CLIENT)
     public void onRegisterModels() {
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
     }
 
     @Override
@@ -72,12 +89,18 @@ public abstract class ModBlock extends Block implements IGameObject {
         return 0;
     }
 
-    protected ModBlock(@Nonnull final String blockName, @Nonnull final Material material) {
+    protected ModBlock(@Nonnull final String blockName, @Nonnull final Material material,
+                       @Nullable final String oreDictionaryName) {
 
         super(material);
+        this._oreDictionaryName = oreDictionaryName;
         this.setRegistryName(blockName);
         this.setUnlocalizedName(this.getRegistryName().toString());
         this.setDefaultState(this.buildDefaultState(this.blockState.getBaseState()));
+    }
+
+    protected ModBlock(@Nonnull final String blockName, @Nonnull final Material material) {
+        this(blockName, material, null);
     }
 
     @Override
@@ -96,4 +119,6 @@ public abstract class ModBlock extends Block implements IGameObject {
     protected IBlockState buildDefaultState(@Nonnull IBlockState state) {
         return state;
     }
+
+    private final String _oreDictionaryName;
 }
