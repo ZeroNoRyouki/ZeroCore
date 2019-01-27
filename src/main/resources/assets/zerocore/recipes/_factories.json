@@ -1,0 +1,6 @@
+{
+	"conditions": {
+		"oreregistered": "it.zerono.mods.zerocore.lib.recipe.factory.OreNameRegisteredConditional",
+		"modloaded": "it.zerono.mods.zerocore.lib.recipe.factory.ModLoadedConditional"
+	}
+}
