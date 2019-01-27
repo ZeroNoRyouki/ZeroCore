@@ -3,17 +3,23 @@ package it.zerono.mods.zerocore.lib.init;
 import com.google.common.collect.*;
 import it.zerono.mods.zerocore.lib.IModInitializationHandler;
 import it.zerono.mods.zerocore.lib.config.ConfigHandler;
+import it.zerono.mods.zerocore.lib.init.fixer.GameObjectWalker;
+import it.zerono.mods.zerocore.lib.init.fixer.IGameObjectDataWalker;
 import it.zerono.mods.zerocore.util.CodeHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.datafix.FixTypes;
+import net.minecraft.util.datafix.IDataWalker;
+import net.minecraft.util.datafix.IFixableData;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ModFixs;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -33,16 +39,27 @@ import java.util.Set;
 
 public abstract class GameObjectsHandler implements IModInitializationHandler {
 
-    protected GameObjectsHandler(ConfigHandler... configs) {
+    protected GameObjectsHandler(final int dataVersion, ConfigHandler... configs) {
 
+        this._dataVersion = dataVersion;
         this._modId = CodeHelper.getModIdFromActiveModContainer();
         this._configHandlers = null != configs ? ImmutableList.copyOf(configs) : ImmutableList.of();
+        this._tilesWalker = null;
 
         this.addBlockRemapper(new LowerCaseMapper<>());
         this.addItemRemapper(new LowerCaseMapper<>());
 
         MinecraftForge.EVENT_BUS.register(this);
         this.syncConfigHandlers();
+    }
+
+    @Nonnull
+    protected String getModId() {
+        return this._modId;
+    }
+
+    protected int getDataVersion() {
+        return this._dataVersion;
     }
 
     /**
@@ -82,6 +99,16 @@ public abstract class GameObjectsHandler implements IModInitializationHandler {
     protected void onRegisterRecipes(@Nonnull final IForgeRegistry<IRecipe> registry) {
     }
 
+    /**
+     * Register all your IDataFixer and IDataWalker
+     */
+    protected void onRegisterDataFixers() {
+
+        if (null != this._tilesWalker) {
+            this.registerDataWalker(FixTypes.BLOCK_ENTITY, this._tilesWalker);
+        }
+    }
+
     protected void addBlockRemapper(@Nonnull final IGameObjectMapper<Block> remapper) {
         this._blocksMappers.add(remapper);
     }
@@ -90,8 +117,33 @@ public abstract class GameObjectsHandler implements IModInitializationHandler {
         this._itemsMappers.add(remapper);
     }
 
-    protected void registerTileEntity(@Nonnull final String namePrefix, @Nonnull final Class<? extends TileEntity> tileEntityClass) {
-        GameRegistry.registerTileEntity(tileEntityClass, namePrefix + tileEntityClass.getSimpleName());
+    protected void registerTileEntity(@Nonnull final Class<? extends TileEntity> tileEntityClass) {
+        this.registerTileEntity(tileEntityClass, null);
+    }
+
+    protected void registerTileEntity(@Nonnull final Class<? extends TileEntity> tileEntityClass,
+                                      @Nullable final IGameObjectDataWalker walker) {
+
+        final ResourceLocation id = new ResourceLocation(this.getModId(), tileEntityClass.getSimpleName());
+
+        GameRegistry.registerTileEntity(tileEntityClass, id);
+
+        if (null != walker) {
+
+            if (null == this._tilesWalker) {
+                this._tilesWalker = new GameObjectWalker();
+            }
+
+            this._tilesWalker.addObjectWalker(id, walker);
+        }
+    }
+
+    protected void registerDataFixer(@Nonnull final FixTypes type, @Nonnull final IFixableData fixer) {
+        this.getModFixs().registerFix(type, fixer);
+    }
+
+    protected void registerDataWalker(@Nonnull final FixTypes type, @Nonnull final IDataWalker walker) {
+        FMLCommonHandler.instance().getDataFixer().registerWalker(type, walker);
     }
 
     @Nullable
@@ -201,12 +253,16 @@ public abstract class GameObjectsHandler implements IModInitializationHandler {
 
     @Override
     public void onInit(FMLInitializationEvent event) {
+
         this.notifyConfigListeners();
+        this.onRegisterDataFixers();
     }
 
     @Override
     public void onPostInit(FMLPostInitializationEvent event) {
     }
+
+    //region internals
 
     private static <T extends IForgeRegistryEntry<T>> void raiseRegisterItemBlocks(
             @Nonnull final ImmutableCollection<T> objects, @Nonnull final IForgeRegistry<Item> registry) {
@@ -266,6 +322,16 @@ public abstract class GameObjectsHandler implements IModInitializationHandler {
 
         for (final ConfigHandler handler : this._configHandlers)
             handler.notifyListeners();
+    }
+
+    @Nonnull
+    private ModFixs getModFixs() {
+
+        if (null == this._modFixs) {
+            this._modFixs = FMLCommonHandler.instance().getDataFixer().init(this.getModId(), this.getDataVersion());
+        }
+
+        return this._modFixs;
     }
 
     private static class TrackingForgeRegistry<T extends IForgeRegistryEntry<T>>
@@ -405,4 +471,9 @@ public abstract class GameObjectsHandler implements IModInitializationHandler {
     private ImmutableMap<String, Item> _items;
     private final List<IGameObjectMapper<Block>> _blocksMappers = Lists.newArrayList();
     private final List<IGameObjectMapper<Item>> _itemsMappers = Lists.newArrayList();
+
+    // Data fixers
+    private final int _dataVersion;
+    private ModFixs _modFixs;
+    private GameObjectWalker _tilesWalker;
 }

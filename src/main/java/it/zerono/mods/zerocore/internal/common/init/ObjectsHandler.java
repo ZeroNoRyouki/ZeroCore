@@ -13,6 +13,10 @@ public class ObjectsHandler extends GameObjectsHandler {
     @GameRegistry.ObjectHolder("zerocore:debugtool")
     public static final ItemDebugTool debugTool = null;
 
+    public ObjectsHandler() {
+        super(DATA_VERSION);
+    }
+
     /**
      * Create all the items instances for this mod and register them
      * Override in your subclass to create your items instances and register them with the provided registry
@@ -23,4 +27,6 @@ public class ObjectsHandler extends GameObjectsHandler {
     protected void onRegisterItems(@Nonnull IForgeRegistry<Item> registry) {
         registry.register(new ItemDebugTool("debugtool"));
     }
+
+    private static final int DATA_VERSION = 1;
 }
