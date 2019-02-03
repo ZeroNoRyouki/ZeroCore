@@ -1,4 +1,4 @@
-package it.zerono.mods.zerocore.lib.init.fixer;
+package it.zerono.mods.zerocore.lib.data.fixer;
 
 import com.google.common.collect.Maps;
 import net.minecraft.nbt.NBTTagCompound;

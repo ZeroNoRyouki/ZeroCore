@@ -1,4 +1,4 @@
-package it.zerono.mods.zerocore.lib.init.fixer;
+package it.zerono.mods.zerocore.lib.data.fixer;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.datafix.IDataFixer;
