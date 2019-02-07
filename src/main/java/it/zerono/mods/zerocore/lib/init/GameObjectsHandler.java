@@ -357,7 +357,7 @@ public abstract class GameObjectsHandler implements IModInitializationHandler {
         public void register(T value) {
 
             this._registry.register(value);
-            this._trackedObjects.put(value.getRegistryName().getResourcePath(), value);
+            this._trackedObjects.put(value.getRegistryName().getPath(), value);
         }
 
         @Override
@@ -452,7 +452,7 @@ public abstract class GameObjectsHandler implements IModInitializationHandler {
         @Override
         public void remap(@Nonnull RegistryEvent.MissingMappings.Mapping<T> mapping) {
 
-            final String candidateName = mapping.key.getResourcePath().toLowerCase();
+            final String candidateName = mapping.key.getPath().toLowerCase();
 
             if (this._map.containsKey(candidateName)) {
 

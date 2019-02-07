@@ -123,7 +123,7 @@ public class ItemDebugTool extends ModItem {
 
             if (null != names && names.length > 0) {
 
-                pool.add("zerocore:debugTool.block.intro", names.length, blockState.getBlock().getUnlocalizedName());
+                pool.add("zerocore:debugTool.block.intro", names.length, blockState.getBlock().getTranslationKey());
                 for (String name : names)
                     pool.add("zerocore:debugTool.block.nameentry", name);
 

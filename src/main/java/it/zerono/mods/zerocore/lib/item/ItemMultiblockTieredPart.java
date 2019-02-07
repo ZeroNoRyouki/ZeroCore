@@ -25,13 +25,13 @@ public class ItemMultiblockTieredPart<Tier extends Enum<Tier> & IPropertyValue,
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getTranslationKey(ItemStack stack) {
 
         @SuppressWarnings("unchecked")
         final BlockMultiblockTieredPart<Tier, PartType, Descriptor> block =
                 (BlockMultiblockTieredPart<Tier, PartType, Descriptor>)this.getBlock();
 
-        return super.getUnlocalizedName() + "." +
+        return super.getTranslationKey() + "." +
                 block.getMultiblockDescriptor().getTierFromMeta(stack.getMetadata()).getName();
     }
 

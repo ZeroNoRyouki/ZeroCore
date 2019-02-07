@@ -95,7 +95,7 @@ public abstract class ModBlock extends Block implements IGameObject {
         super(material);
         this._oreDictionaryName = oreDictionaryName;
         this.setRegistryName(blockName);
-        this.setUnlocalizedName(this.getRegistryName().toString());
+        this.setTranslationKey(this.getRegistryName().toString());
         this.setDefaultState(this.buildDefaultState(this.blockState.getBaseState()));
     }
 

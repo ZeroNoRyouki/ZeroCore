@@ -91,7 +91,7 @@ public abstract class ModItem extends Item implements IGameObject {
 
         this._oreDictionaryName = oreDictionaryName;
         this.setRegistryName(itemName);
-        this.setUnlocalizedName(this.getRegistryName().toString());
+        this.setTranslationKey(this.getRegistryName().toString());
     }
 
     protected ModItem(@Nonnull final String itemName) {

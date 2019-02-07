@@ -200,7 +200,7 @@ public class BlockReplacer implements IFixableData, IGameObjectMapper<Block> {
 
             final NBTTagCompound nbt = tileEntities.getCompoundTagAt(idx);
 
-            if (!nbt.hasNoTags()) {
+            if (!nbt.isEmpty()) {
                 map.put(new BlockPos(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z")), Pair.of(idx, nbt));
             }
         }
