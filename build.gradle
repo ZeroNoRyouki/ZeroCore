@@ -1,7 +1,10 @@
 buildscript {
     repositories {
         jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
@@ -27,22 +30,19 @@ ext.dependencies = "required-after:forge@[${config.forge_version_minDep},${confi
 ext.fullVersion = project.config.minecraft_version + '-' + project.version
 
 minecraft {
-    version = "${config.forge_version}"
+    version = "${config.minecraft_version}-${config.forge_version}"
 
-	if (file("../../run/run-${config.minecraft_version}").exists()) {
-		runDir = "../../run/run-${config.minecraft_version}"
-	} else {
-		runDir = "run"
-	}
+    def runDir = file("${rootProject.projectDir}/runs/run-${config.minecraft_version}")
+
+    if (!runDir.exists()) {
+        runDir = file("run-${config.minecraft_version}")
+    }
 
     mappings = "${config.minecraft_mappings}"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
-sourceCompatibility = targetCompatibility = "1.8"
-compileJava {
-    sourceCompatibility = targetCompatibility = "1.8"
-}
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 configurations {
     deployerJars
@@ -66,24 +66,6 @@ dependencies {
     compile group: "dan200.computercraft", name: "ComputerCraft", version: "${config.computercraft_version}"
 }
 
-sourceSets {
-    main {
-        java {
-            srcDir 'src/main/java'
-        }
-        resources {
-            srcDir 'resources'
-        }
-    }
-    api {
-        java {
-            srcDir 'CoFHLib/src/main/java'
-            exclude '**/cofh/lib/**'
-            exclude '**/IGeneratorParser.java'
-        }
-    }
-}
-
 processResources  {
 
     // this will ensure that this task is redone when the versions change.
@@ -96,7 +78,7 @@ processResources  {
         include 'mcmod.info'
         expand 'version':project.ext.fullVersion, 'mcversion':project.minecraft.version
     }
-        
+
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
@@ -132,14 +114,6 @@ jar {
     classifier = ""
 }
 
-//Creates the source jar.
-task sourcesJar(type: Jar, dependsOn: classes) {
-
-    from sourceSets.main.allSource
-	from sourceSets.api.allSource
-    classifier = 'sources'
-}
-
 //Creates the JavaDoc jar.
 task javadocJar(type: Jar, dependsOn: javadoc) {
 
@@ -159,7 +133,6 @@ artifacts {
 
 	archives jar
     archives deobfJar
-    archives sourcesJar
     archives javadocJar
 }
 
@@ -168,7 +141,8 @@ uploadArchives {
     repositories {
 
         mavenDeployer {
-            repository(url: "file://C:\\MC\\ForgeDEV\\Mod Workspace\\ZeroCore\\maven")
+
+            repository(url: "file:///${rootProject.projectDir}/maven")
             pom.version = project.ext.fullVersion
             pom.artifactId = 'zerocore'
         }
