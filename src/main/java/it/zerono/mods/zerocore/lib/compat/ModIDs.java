@@ -8,6 +8,7 @@ public final class ModIDs {
     public static final String MODID_THERMALEXPANSION = "thermalexpansion";
     public static final String MODID_MINEFACTORYRELOADED = "minefactoryreloaded";
     public static final String MODID_APPLIEDENERGISTICS2 = "appliedenergistics2";
+    public static final String MODID_PATCHOULI = "patchouli";
 
     private ModIDs() {
     }
