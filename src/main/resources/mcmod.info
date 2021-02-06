@@ -5,7 +5,7 @@
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "http://zerono.it/",
-  "updateUrl": "",
+  "updateUrl": "https://raw.githubusercontent.com/ZeroNoRyouki/ForgeUpdate/master/zc1-12.json",
   "authorList": ["ZeroNoRyouki"],
   "logoFile": "",
   "screenshots": [],
