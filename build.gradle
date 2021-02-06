@@ -39,7 +39,7 @@ minecraft {
     }
 
     mappings = "${config.minecraft_mappings}"
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+    makeObfSourceJar = false
 }
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
@@ -114,6 +114,14 @@ jar {
     classifier = ""
 }
 
+//Creates the source jar.
+task sourcesJar(type: Jar, dependsOn: classes) {
+
+    from sourceSets.main.allSource
+    from sourceSets.api.allSource
+    classifier = 'sources'
+}
+
 //Creates the JavaDoc jar.
 task javadocJar(type: Jar, dependsOn: javadoc) {
 
@@ -133,6 +141,7 @@ artifacts {
 
 	archives jar
     archives deobfJar
+    archives sourcesJar
     archives javadocJar
 }
 
